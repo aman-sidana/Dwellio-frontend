@@ -1,7 +1,16 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Building2, Heart, Shield, Phone, Mail, MapPin } from "lucide-react";
 
 export default function Footer() {
+  const pathname = usePathname();
+
+  if (pathname && (pathname.startsWith("/admin") || pathname.startsWith("/dashboard"))) {
+    return null;
+  }
+
   return (
     <footer className="w-full bg-slate-900 text-slate-400 text-sm border-t border-slate-800 mt-auto">
       <div className="w-full px-4 sm:px-8 lg:px-12 py-12">
@@ -12,10 +21,10 @@ export default function Footer() {
               <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white">
                 <Building2 className="w-4 h-4" />
               </div>
-              Dwell<span className="text-indigo-400">io</span>
+              Dwellio
             </div>
             <p className="text-xs text-slate-400 leading-relaxed">
-              India&apos;s modern real estate platform inspired by 99acres. Buy, rent, and sell verified apartments, villas, and residential plots.
+              India&apos;s modern real estate platform . Buy, rent, and sell verified apartments, villas, and residential plots.
             </p>
           </div>
 

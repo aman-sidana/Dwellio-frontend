@@ -76,14 +76,14 @@ function EditPropertyContent({ params }) {
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      <Link href="/dashboard/properties" className="inline-flex items-center gap-1 text-xs font-semibold text-slate-500 hover:text-slate-800 mb-6">
+    <div className="max-w-3xl mx-auto space-y-4">
+      <Link href="/dashboard/properties" className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition">
         <ArrowLeft className="w-3.5 h-3.5" /> Back to My Properties
       </Link>
 
-      <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-xs">
-        <h1 className="text-2xl font-extrabold text-slate-900 mb-1">Edit Property #{id}</h1>
-        <p className="text-sm text-slate-500 mb-6">Update price, title, or details for your listing</p>
+      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-xs transition-colors">
+        <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white mb-1">Edit Property #{id}</h1>
+        <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">Update price, title, or details for your listing</p>
 
         {status.error && (
           <div className="p-4 mb-6 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-800">

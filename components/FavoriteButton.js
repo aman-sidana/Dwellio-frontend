@@ -66,8 +66,8 @@ export default function FavoriteButton({ propertyId, initialFavorite = false, on
       type="button"
       title={isFavorite ? "Remove from Saved" : "Save Property"}
       className={`p-2 rounded-full transition shadow-xs flex items-center justify-center ${isFavorite
-        ? "bg-rose-50 text-rose-600 hover:bg-rose-100"
-        : "bg-white/90 hover:bg-white text-slate-600 hover:text-rose-600"
+        ? "bg-rose-50 dark:bg-rose-950/80 text-rose-600 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-900/80"
+        : "bg-white/90 dark:bg-slate-900/90 hover:bg-white dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-rose-600"
         } ${className}`}
     >
       <Heart className={`w-4 h-4 transition-transform ${isFavorite ? "fill-rose-500 text-rose-500 scale-110" : ""}`} />

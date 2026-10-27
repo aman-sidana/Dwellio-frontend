@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { ThemeProvider } from "@/context/ThemeContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,12 +23,38 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} w-full min-h-screen antialiased`}
     >
-      <body className="w-full min-h-screen flex flex-col bg-slate-50 text-slate-900 font-sans overflow-x-hidden m-0 p-0">
-        <Navbar />
-        <main className="w-full flex-1">{children}</main>
-        <Footer />
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                let savedTheme = 'light';
+                for (let i = 0; i < localStorage.length; i++) {
+                  const key = localStorage.key(i);
+                  if (key && key.startsWith('dwellio_theme_')) {
+                    savedTheme = localStorage.getItem(key) || 'light';
+                    break;
+                  }
+                }
+                if (savedTheme === 'dark') {
+                  document.documentElement.classList.add('dark');
+                } else {
+                  document.documentElement.classList.remove('dark');
+                }
+              } catch (e) {}
+            `,
+          }}
+        />
+      </head>
+      <body className="w-full min-h-screen flex flex-col bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 font-sans overflow-x-hidden m-0 p-0 transition-colors duration-200">
+        <ThemeProvider>
+          <Navbar />
+          <main className="w-full flex-1">{children}</main>
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   );

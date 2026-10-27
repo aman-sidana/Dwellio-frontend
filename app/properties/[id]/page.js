@@ -8,6 +8,8 @@ import {
   User, Heart, Share2, ShieldCheck, ChevronRight, ArrowLeft
 } from "lucide-react";
 
+import { getAuthHeaders, getToken } from "@/lib/auth";
+
 export default function PropertyDetailPage({ params }) {
   const unwrappedParams = use(params);
   const id = unwrappedParams.id;
@@ -24,6 +26,31 @@ export default function PropertyDetailPage({ params }) {
     message: "I am interested in this property. Please share further details.",
   });
   const [enquiryStatus, setEnquiryStatus] = useState({ submitting: false, success: false, message: "" });
+
+  // Pre-fill buyer details if logged in
+  useEffect(() => {
+    async function loadUser() {
+      const token = getToken();
+      if (!token) return;
+      try {
+        const res = await fetch("http://localhost:5000/api/users/me", {
+          headers: getAuthHeaders(),
+        });
+        if (res.ok) {
+          const json = await res.json();
+          if (json.data) {
+            setEnquiryForm((prev) => ({
+              ...prev,
+              name: prev.name || json.data.name || "",
+              email: prev.email || json.data.email || "",
+              phone: prev.phone || json.data.phone || "",
+            }));
+          }
+        }
+      } catch (err) {}
+    }
+    loadUser();
+  }, []);
 
   useEffect(() => {
     async function fetchDetails() {
@@ -48,7 +75,7 @@ export default function PropertyDetailPage({ params }) {
     try {
       const res = await fetch("http://localhost:5000/api/enquiries", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: getAuthHeaders({ "Content-Type": "application/json" }),
         body: JSON.stringify({
           propertyId: id,
           ...enquiryForm,

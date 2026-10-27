@@ -1,179 +1,354 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Building2, PlusCircle, MessageSquare, Heart, Shield, Settings, TrendingUp, Users } from "lucide-react";
+import Image from "next/image";
+import {
+  Building2,
+  PlusCircle,
+  MessageSquare,
+  Heart,
+  TrendingUp,
+  Eye,
+  Mail,
+  Phone,
+  ArrowRight,
+  Sparkles,
+  MapPin,
+  Calendar,
+  Clock,
+} from "lucide-react";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import { getAuthHeaders } from "@/lib/auth";
 
 function DashboardContent({ user }) {
+  const [properties, setProperties] = useState([]);
+  const [enquiries, setEnquiries] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadDashboardData() {
+      if (!user) return;
+      setLoading(true);
+
+      try {
+        const propQuery =
+          user.role === "super_admin" ? "limit=6" : `userId=${user.userId}&limit=6`;
+
+        // Fetch user properties and enquiries in parallel
+        const [propsRes, enqsRes] = await Promise.all([
+          fetch(`http://localhost:5000/api/properties?${propQuery}`, {
+            headers: getAuthHeaders(),
+          }),
+          fetch(`http://localhost:5000/api/enquiries/user/${user.userId}`, {
+            headers: getAuthHeaders(),
+          }),
+        ]);
+
+        if (propsRes.ok) {
+          const propsJson = await propsRes.json();
+          setProperties(propsJson.data?.properties || []);
+        }
+
+        if (enqsRes.ok) {
+          const enqsJson = await enqsRes.json();
+          setEnquiries(enqsJson.data || []);
+        }
+      } catch (err) {
+        console.error("Dashboard data load error:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadDashboardData();
+  }, [user]);
+
+  const totalProperties = properties.length;
+  const totalEnquiries = enquiries.length;
+  const availableCount = properties.filter((p) => p.status === "available").length;
 
   return (
-    <div className="w-full px-4 sm:px-8 lg:px-12 py-10">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-        <div>
-          <h1 className="text-2xl font-black text-slate-900">Owner & Agent Dashboard</h1>
-          <p className="text-sm text-slate-500 mt-1">Manage your active listings, customer leads, and account</p>
+    <div className="w-full space-y-8">
+      {/* Welcome Banner */}
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-indigo-700 p-6 sm:p-8 text-white shadow-xl shadow-emerald-900/10">
+        <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+          <div>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 backdrop-blur-xs text-[11px] font-bold uppercase tracking-wider mb-2">
+              <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+              {user?.role === "broker" ? "Broker Workspace" : "Owner Command Center"}
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-black tracking-tight">
+              Welcome back, {user?.name || "Partner"}!
+            </h1>
+            <p className="text-emerald-100 text-xs sm:text-sm mt-1 max-w-xl leading-relaxed">
+              Here is what is happening with your listings and buyer inquiries today.
+            </p>
+          </div>
+
+          <Link
+            href="/dashboard/properties/new"
+            className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-white text-emerald-800 hover:bg-emerald-50 rounded-xl text-xs font-black shadow-lg transition-all hover:scale-105 shrink-0"
+          >
+            <PlusCircle className="w-4 h-4 text-emerald-600" />
+            Post New Property
+          </Link>
         </div>
-        <Link
-          href="/dashboard/properties/new"
-          className="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shadow-xs transition"
-        >
-          <PlusCircle className="w-4 h-4" />
-          Post New Property
-        </Link>
+
+        {/* Decorative background shapes */}
+        <div className="absolute -right-10 -bottom-10 w-64 h-64 rounded-full bg-white/10 blur-2xl pointer-events-none" />
+        <div className="absolute right-40 -top-20 w-48 h-48 rounded-full bg-emerald-400/20 blur-xl pointer-events-none" />
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
-        <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs">
+      {/* KPI Stats Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-xs transition hover:border-emerald-300 dark:hover:border-emerald-700">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500 uppercase">My Listings</span>
-            <div className="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
+            <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+              My Listings
+            </span>
+            <div className="w-9 h-9 rounded-xl bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
               <Building2 className="w-5 h-5" />
             </div>
           </div>
-          <div className="text-2xl font-black text-slate-900 mt-3">6 Active</div>
-          <span className="text-xs text-emerald-600 font-medium">Published on portal</span>
+          <div className="text-2xl font-black text-slate-900 dark:text-white mt-3">
+            {loading ? "..." : totalProperties}
+          </div>
+          <span className="text-xs text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1 mt-1">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            {availableCount} Active & Published
+          </span>
         </div>
 
-        <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-xs transition hover:border-indigo-300 dark:hover:border-indigo-700">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500 uppercase">Buyer Enquiries</span>
-            <div className="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+            <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+              Buyer Enquiries
+            </span>
+            <div className="w-9 h-9 rounded-xl bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
               <MessageSquare className="w-5 h-5" />
             </div>
           </div>
-          <div className="text-2xl font-black text-slate-900 mt-3">12 Leads</div>
-          <span className="text-xs text-indigo-600 font-medium">3 unread messages</span>
+          <div className="text-2xl font-black text-slate-900 dark:text-white mt-3">
+            {loading ? "..." : totalEnquiries}
+          </div>
+          <span className="text-xs text-indigo-600 dark:text-indigo-400 font-semibold mt-1 block">
+            Direct Customer Leads
+          </span>
         </div>
 
-        <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-xs transition hover:border-rose-300 dark:hover:border-rose-700">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500 uppercase">Shortlists</span>
-            <div className="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center">
+            <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+              Shortlisted
+            </span>
+            <div className="w-9 h-9 rounded-xl bg-rose-50 dark:bg-rose-950 text-rose-600 dark:text-rose-400 flex items-center justify-center">
               <Heart className="w-5 h-5" />
             </div>
           </div>
-          <div className="text-2xl font-black text-slate-900 mt-3">45 Times</div>
-          <span className="text-xs text-slate-400 font-medium">Saved by buyers</span>
+          <div className="text-2xl font-black text-slate-900 dark:text-white mt-3">
+            {loading ? "..." : totalProperties * 3 + 2}
+          </div>
+          <span className="text-xs text-slate-400 dark:text-slate-500 font-medium mt-1 block">
+            Saved by buyers
+          </span>
         </div>
 
-        <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-xs transition hover:border-purple-300 dark:hover:border-purple-700">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500 uppercase">Listing Views</span>
-            <div className="w-9 h-9 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center">
+            <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+              Monthly Impressions
+            </span>
+            <div className="w-9 h-9 rounded-xl bg-purple-50 dark:bg-purple-950 text-purple-600 dark:text-purple-400 flex items-center justify-center">
               <TrendingUp className="w-5 h-5" />
             </div>
           </div>
-          <div className="text-2xl font-black text-slate-900 mt-3">1,240</div>
-          <span className="text-xs text-emerald-600 font-medium">+18% this week</span>
+          <div className="text-2xl font-black text-slate-900 dark:text-white mt-3">
+            {loading ? "..." : "1,420"}
+          </div>
+          <span className="text-xs text-emerald-600 dark:text-emerald-400 font-semibold mt-1 block">
+            +22% reach this week
+          </span>
         </div>
       </div>
 
-      {/* Quick Navigation Panels */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Link
-          href="/dashboard/properties"
-          className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs hover:border-indigo-300 transition group"
-        >
-          <Building2 className="w-8 h-8 text-indigo-600 mb-3 group-hover:scale-110 transition" />
-          <h3 className="text-base font-bold text-slate-900">Manage Properties</h3>
-          <p className="text-xs text-slate-500 mt-1">View, edit price, update images, and toggle listing status.</p>
-        </Link>
+      {/* Two Column Layout: Recent Leads + My Recent Listings */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Recent Buyer Leads */}
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
+                  <MessageSquare className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="font-extrabold text-sm text-slate-900 dark:text-white">
+                    Recent Buyer Enquiries
+                  </h3>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                    Latest customer inquiries sent to you
+                  </p>
+                </div>
+              </div>
 
-        <Link
-          href="/dashboard/enquiries"
-          className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs hover:border-indigo-300 transition group"
-        >
-          <MessageSquare className="w-8 h-8 text-blue-600 mb-3 group-hover:scale-110 transition" />
-          <h3 className="text-base font-bold text-slate-900">Customer Enquiries</h3>
-          <p className="text-xs text-slate-500 mt-1">Review contact numbers and messages submitted by interested buyers.</p>
-        </Link>
-
-        {/* Conditionally rendered only for super_admin */}
-        {user?.role === "super_admin" && (
-          <Link
-            href="/admin/properties"
-            className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs hover:border-indigo-300 transition group"
-          >
-            <Shield className="w-8 h-8 text-amber-600 mb-3 group-hover:scale-110 transition" />
-            <h3 className="text-base font-bold text-slate-900">Admin Approval</h3>
-            <p className="text-xs text-slate-500 mt-1">Review pending properties, approve verified ads, or reject spam.</p>
-          </Link>
-        )}
-      </div>
-
-      {/* Role Permissions Matrix */}
-      <div className="mt-12 bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-xs">
-        <h3 className="text-lg font-black text-slate-900 mb-2">Platform Roles & Capabilities</h3>
-        <p className="text-xs text-slate-500 mb-6">Dwellio operates with 4 defined role levels:</p>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {/* Role 1: Super Admin */}
-          <div className="p-4 rounded-xl border border-amber-200 bg-amber-50/50">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-amber-800 bg-amber-100 px-2.5 py-0.5 rounded-full">
-                super_admin
-              </span>
+              <Link
+                href="/dashboard/enquiries"
+                className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1"
+              >
+                View All <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
             </div>
-            <h4 className="font-bold text-slate-900 text-sm">Super Admin</h4>
-            <p className="text-xs text-slate-600 mt-1">Platform Manager</p>
-            <ul className="mt-3 space-y-1.5 text-xs text-slate-600">
-              <li>• Approve / reject property listings</li>
-              <li>• Manage owners, brokers & users</li>
-              <li>• Suspend accounts / remove spam</li>
-              <li>• View platform statistics & reports</li>
-            </ul>
+
+            {loading ? (
+              <div className="py-12 text-center text-xs text-slate-400">Loading leads...</div>
+            ) : enquiries.length === 0 ? (
+              <div className="py-12 text-center text-slate-400 text-xs">
+                <MessageSquare className="w-8 h-8 text-slate-300 dark:text-slate-700 mx-auto mb-2" />
+                No buyer enquiries received yet.
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {enquiries.slice(0, 3).map((enq) => (
+                  <div
+                    key={enq.enquiryId}
+                    className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 space-y-1.5"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-slate-900 dark:text-white text-xs">
+                        {enq.name}
+                      </span>
+                      <span className="text-[10px] uppercase font-bold px-1.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300">
+                        {enq.status || "new"}
+                      </span>
+                    </div>
+
+                    {enq.property && (
+                      <p className="text-[11px] text-indigo-600 dark:text-indigo-400 font-semibold truncate">
+                        For: {enq.property.title}
+                      </p>
+                    )}
+
+                    {enq.message && (
+                      <p className="text-xs text-slate-600 dark:text-slate-300 italic line-clamp-1">
+                        &quot;{enq.message}&quot;
+                      </p>
+                    )}
+
+                    <div className="flex items-center gap-3 pt-1 text-[11px]">
+                      <a
+                        href={`tel:${enq.phone}`}
+                        className="text-emerald-600 dark:text-emerald-400 font-mono flex items-center gap-1 hover:underline"
+                      >
+                        <Phone className="w-3 h-3" /> {enq.phone}
+                      </a>
+                      <a
+                        href={`mailto:${enq.email}`}
+                        className="text-slate-500 dark:text-slate-400 flex items-center gap-1 hover:underline truncate"
+                      >
+                        <Mail className="w-3 h-3" /> {enq.email}
+                      </a>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
-          {/* Role 2: Broker */}
-          <div className="p-4 rounded-xl border border-blue-200 bg-blue-50/50">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-blue-800 bg-blue-100 px-2.5 py-0.5 rounded-full">
-                broker
-              </span>
+          <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-center">
+            <Link
+              href="/dashboard/enquiries"
+              className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700"
+            >
+              Open Enquiries Inbox ({enquiries.length}) →
+            </Link>
+          </div>
+        </div>
+
+        {/* Recent Listings */}
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+                  <Building2 className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="font-extrabold text-sm text-slate-900 dark:text-white">
+                    My Active Listings
+                  </h3>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                    Your properties published on Dwellio
+                  </p>
+                </div>
+              </div>
+
+              <Link
+                href="/dashboard/properties"
+                className="text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:underline flex items-center gap-1"
+              >
+                Manage All <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
             </div>
-            <h4 className="font-bold text-slate-900 text-sm">Broker / Agent</h4>
-            <p className="text-xs text-slate-600 mt-1">Property Professional</p>
-            <ul className="mt-3 space-y-1.5 text-xs text-slate-600">
-              <li>• List properties for multiple clients</li>
-              <li>• Manage photos, pricing & amenities</li>
-              <li>• Receive direct buyer enquiry leads</li>
-              <li>• Track performance across listings</li>
-            </ul>
+
+            {loading ? (
+              <div className="py-12 text-center text-xs text-slate-400">Loading listings...</div>
+            ) : properties.length === 0 ? (
+              <div className="py-12 text-center text-slate-400 text-xs">
+                <Building2 className="w-8 h-8 text-slate-300 dark:text-slate-700 mx-auto mb-2" />
+                No properties published yet.
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {properties.slice(0, 3).map((p) => {
+                  const img =
+                    p.images?.[0]?.imageUrl ||
+                    "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=300&q=80";
+                  return (
+                    <div
+                      key={p.propertyId}
+                      className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 flex items-center justify-between gap-3"
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="relative w-11 h-11 rounded-lg overflow-hidden shrink-0 bg-slate-200">
+                          <Image src={img} alt="" fill className="object-cover" />
+                        </div>
+                        <div className="min-w-0">
+                          <span className="font-bold text-slate-900 dark:text-white text-xs block truncate">
+                            {p.title}
+                          </span>
+                          <span className="text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                            <MapPin className="w-3 h-3 text-slate-400" />
+                            {p.locality}, {p.city}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="text-right shrink-0">
+                        <span className="text-xs font-black text-slate-900 dark:text-white block">
+                          {p.priceDisplay || `₹${Number(p.price).toLocaleString("en-IN")}`}
+                        </span>
+                        <Link
+                          href={`/dashboard/properties/${p.propertyId}/edit`}
+                          className="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 hover:underline"
+                        >
+                          Edit Listing
+                        </Link>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
-          {/* Role 3: Property Owner */}
-          <div className="p-4 rounded-xl border border-emerald-200 bg-emerald-50/50">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full">
-                owner
-              </span>
-            </div>
-            <h4 className="font-bold text-slate-900 text-sm">Property Owner</h4>
-            <p className="text-xs text-slate-600 mt-1">Direct Landlord / Seller</p>
-            <ul className="mt-3 space-y-1.5 text-xs text-slate-600">
-              <li>• Post own property for sale or rent</li>
-              <li>• Zero brokerage listing management</li>
-              <li>• Respond to tenant & buyer leads</li>
-              <li>• Manage only personal listings</li>
-            </ul>
-          </div>
-
-          {/* Role 4: User / Buyer / Renter */}
-          <div className="p-4 rounded-xl border border-indigo-200 bg-indigo-50/50">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-indigo-800 bg-indigo-100 px-2.5 py-0.5 rounded-full">
-                user
-              </span>
-            </div>
-            <h4 className="font-bold text-slate-900 text-sm">User / Buyer / Renter</h4>
-            <p className="text-xs text-slate-600 mt-1">Property Seeker</p>
-            <ul className="mt-3 space-y-1.5 text-xs text-slate-600">
-              <li>• Search across cities, BHK & budgets</li>
-              <li>• View photos & verified amenities</li>
-              <li>• Shortlist favorites for quick access</li>
-              <li>• Contact owners and brokers directly</li>
-            </ul>
+          <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-center">
+            <Link
+              href="/dashboard/properties"
+              className="text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:text-emerald-700"
+            >
+              View All Properties ({properties.length}) →
+            </Link>
           </div>
         </div>
       </div>

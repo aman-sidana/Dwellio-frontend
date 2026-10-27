@@ -42,7 +42,9 @@ function LoginFormContent() {
       setStatus({ loading: false, error: "", success: true });
       setTimeout(() => {
         let destination = redirectUrl;
-        if (redirectUrl === "/dashboard" && json.data?.role === "user") {
+        if (redirectUrl === "/dashboard" && json.data?.role === "super_admin") {
+          destination = "/admin";
+        } else if (redirectUrl === "/dashboard" && json.data?.role === "user") {
           destination = "/properties";
         }
         window.location.href = destination;
