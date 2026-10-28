@@ -5,7 +5,6 @@ import Link from "next/link";
 import Image from "next/image";
 import {
   Building2,
-  PlusCircle,
   MessageSquare,
   Heart,
   TrendingUp,
@@ -87,11 +86,11 @@ function DashboardContent({ user }) {
           </div>
 
           <Link
-            href="/dashboard/properties/new"
+            href="/dashboard/properties"
             className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-white text-emerald-800 hover:bg-emerald-50 rounded-xl text-xs font-black shadow-lg transition-all hover:scale-105 shrink-0"
           >
-            <PlusCircle className="w-4 h-4 text-emerald-600" />
-            Post New Property
+            <Building2 className="w-4 h-4 text-emerald-600" />
+            Manage My Properties
           </Link>
         </div>
 

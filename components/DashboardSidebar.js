@@ -6,9 +6,7 @@ import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   Building2,
-  PlusCircle,
   MessageSquare,
-  Heart,
   Globe,
   LogOut,
   Menu,
@@ -36,23 +34,10 @@ const navItems = [
     description: "Manage listings & status",
   },
   {
-    name: "Post New Property",
-    href: "/dashboard/properties/new",
-    icon: PlusCircle,
-    description: "Upload photos & publish",
-    badge: "FREE",
-  },
-  {
     name: "Buyer Enquiries",
     href: "/dashboard/enquiries",
     icon: MessageSquare,
     description: "Customer calls & leads",
-  },
-  {
-    name: "Saved Properties",
-    href: "/favorites",
-    icon: Heart,
-    description: "Your shortlisted homes",
   },
 ];
 
@@ -243,13 +228,6 @@ export default function DashboardSidebar({ user }) {
 
         <div className="flex items-center gap-2">
           <ThemeToggle />
-          <Link
-            href="/dashboard/properties/new"
-            className="p-1.5 bg-emerald-600 text-white rounded-lg"
-            title="Post Property"
-          >
-            <PlusCircle className="w-4 h-4" />
-          </Link>
         </div>
       </header>
 
