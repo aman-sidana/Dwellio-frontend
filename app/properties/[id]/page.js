@@ -125,19 +125,19 @@ export default function PropertyDetailPage({ params }) {
   return (
     <div className="w-full px-4 sm:px-8 lg:px-12 py-8">
       {/* Breadcrumb */}
-      <div className="flex items-center gap-2 text-xs text-slate-500 mb-6">
-        <Link href="/" className="hover:text-indigo-600">Home</Link>
+      <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 mb-6">
+        <Link href="/" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition">Home</Link>
         <ChevronRight className="w-3.5 h-3.5" />
-        <Link href="/properties" className="hover:text-indigo-600">Properties</Link>
+        <Link href="/properties" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition">Properties</Link>
         <ChevronRight className="w-3.5 h-3.5" />
-        <span className="text-slate-800 font-medium truncate max-w-xs">{property.title}</span>
+        <span className="text-slate-800 dark:text-slate-200 font-medium truncate max-w-xs">{property.title}</span>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Left Column (Images, Specs, Amenities, Description) */}
         <div className="lg:col-span-2 space-y-8">
           {/* Main Photo Gallery */}
-          <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-xs">
             <div className="relative h-72 sm:h-96 w-full bg-slate-900">
               <Image
                 src={images[activeImg]?.imageUrl || images[0].imageUrl}
@@ -160,13 +160,14 @@ export default function PropertyDetailPage({ params }) {
 
             {/* Thumbnails */}
             {images.length > 1 && (
-              <div className="p-3 bg-slate-50 border-t border-slate-100 flex gap-2 overflow-x-auto">
+              <div className="p-3 bg-slate-50 dark:bg-slate-800/80 border-t border-slate-100 dark:border-slate-800 flex gap-2 overflow-x-auto">
                 {images.map((img, idx) => (
                   <button
                     key={idx}
                     onClick={() => setActiveImg(idx)}
-                    className={`relative w-20 h-14 rounded-lg overflow-hidden shrink-0 border-2 transition ${activeImg === idx ? "border-indigo-600 shadow-xs" : "border-transparent opacity-70 hover:opacity-100"
-                      }`}
+                    className={`relative w-20 h-14 rounded-lg overflow-hidden shrink-0 border-2 transition ${
+                      activeImg === idx ? "border-indigo-600 shadow-xs" : "border-transparent opacity-70 hover:opacity-100"
+                    }`}
                   >
                     <Image src={img.imageUrl} alt="Thumbnail" fill className="object-cover" />
                   </button>
@@ -176,20 +177,20 @@ export default function PropertyDetailPage({ params }) {
           </div>
 
           {/* Heading & Key Specs */}
-          <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100 dark:border-slate-800">
               <div>
-                <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900">{property.title}</h1>
-                <p className="text-sm text-slate-500 flex items-center gap-1.5 mt-2">
-                  <MapPin className="w-4 h-4 text-indigo-600 shrink-0" />
+                <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">{property.title}</h1>
+                <p className="text-sm text-slate-500 dark:text-slate-400 flex items-center gap-1.5 mt-2">
+                  <MapPin className="w-4 h-4 text-indigo-600 dark:text-indigo-400 shrink-0" />
                   {property.address ? `${property.address}, ` : ""}{property.locality}, {property.city}
                 </p>
               </div>
               <div className="text-left sm:text-right">
-                <div className="text-3xl font-black text-indigo-700">
+                <div className="text-3xl font-black text-indigo-700 dark:text-indigo-400">
                   {property.priceDisplay || `₹${Number(property.price).toLocaleString("en-IN")}`}
                 </div>
-                <span className="text-xs text-slate-400 capitalize">
+                <span className="text-xs text-slate-400 dark:text-slate-500 capitalize">
                   {property.listingType === "rent" ? "Monthly Rent" : "Asking Price"}
                 </span>
               </div>
@@ -197,41 +198,41 @@ export default function PropertyDetailPage({ params }) {
 
             {/* Quick Specs Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6">
-              <div className="p-3 bg-slate-50 rounded-xl">
-                <span className="text-[11px] font-semibold text-slate-400 uppercase">Configuration</span>
-                <p className="font-bold text-slate-800 text-sm mt-0.5">{property.bedrooms ? `${property.bedrooms} BHK` : "N/A"}</p>
+              <div className="p-3 bg-slate-50 dark:bg-slate-800/80 border border-transparent dark:border-slate-700/60 rounded-xl">
+                <span className="text-[11px] font-semibold text-slate-400 dark:text-slate-400 uppercase">Configuration</span>
+                <p className="font-bold text-slate-800 dark:text-slate-100 text-sm mt-0.5">{property.bedrooms ? `${property.bedrooms} BHK` : "N/A"}</p>
               </div>
-              <div className="p-3 bg-slate-50 rounded-xl">
-                <span className="text-[11px] font-semibold text-slate-400 uppercase">Super Area</span>
-                <p className="font-bold text-slate-800 text-sm mt-0.5">{Number(property.areaSqFt).toLocaleString()} sq.ft</p>
+              <div className="p-3 bg-slate-50 dark:bg-slate-800/80 border border-transparent dark:border-slate-700/60 rounded-xl">
+                <span className="text-[11px] font-semibold text-slate-400 dark:text-slate-400 uppercase">Super Area</span>
+                <p className="font-bold text-slate-800 dark:text-slate-100 text-sm mt-0.5">{Number(property.areaSqFt).toLocaleString()} sq.ft</p>
               </div>
-              <div className="p-3 bg-slate-50 rounded-xl">
-                <span className="text-[11px] font-semibold text-slate-400 uppercase">Furnishing</span>
-                <p className="font-bold text-slate-800 text-sm mt-0.5 capitalize">{property.furnishing?.replace("_", " ") || "Semi-furnished"}</p>
+              <div className="p-3 bg-slate-50 dark:bg-slate-800/80 border border-transparent dark:border-slate-700/60 rounded-xl">
+                <span className="text-[11px] font-semibold text-slate-400 dark:text-slate-400 uppercase">Furnishing</span>
+                <p className="font-bold text-slate-800 dark:text-slate-100 text-sm mt-0.5 capitalize">{property.furnishing?.replace("_", " ") || "Semi-furnished"}</p>
               </div>
-              <div className="p-3 bg-slate-50 rounded-xl">
-                <span className="text-[11px] font-semibold text-slate-400 uppercase">Possession</span>
-                <p className="font-bold text-slate-800 text-sm mt-0.5 capitalize">{property.possessionStatus?.replace("_", " ") || "Ready to Move"}</p>
+              <div className="p-3 bg-slate-50 dark:bg-slate-800/80 border border-transparent dark:border-slate-700/60 rounded-xl">
+                <span className="text-[11px] font-semibold text-slate-400 dark:text-slate-400 uppercase">Possession</span>
+                <p className="font-bold text-slate-800 dark:text-slate-100 text-sm mt-0.5 capitalize">{property.possessionStatus?.replace("_", " ") || "Ready to Move"}</p>
               </div>
             </div>
           </div>
 
           {/* Description */}
-          <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs">
-            <h2 className="text-lg font-bold text-slate-900 mb-3">About this property</h2>
-            <p className="text-sm text-slate-600 leading-relaxed whitespace-pre-line">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs">
+            <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-3">About this property</h2>
+            <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed whitespace-pre-line">
               {property.description || "No description provided for this listing."}
             </p>
           </div>
 
           {/* Amenities */}
           {property.amenities && property.amenities.length > 0 && (
-            <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs">
-              <h2 className="text-lg font-bold text-slate-900 mb-4">Amenities & Facilities</h2>
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs">
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-4">Amenities & Facilities</h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 {property.amenities.map((amenity) => (
-                  <div key={amenity.amenityId} className="flex items-center gap-2 p-3 rounded-xl bg-slate-50 border border-slate-100 text-xs font-semibold text-slate-700">
-                    <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <div key={amenity.amenityId} className="flex items-center gap-2 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-100 dark:border-slate-700/60 text-xs font-semibold text-slate-700 dark:text-slate-200">
+                    <CheckCircle className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
                     <span>{amenity.name}</span>
                   </div>
                 ))}
@@ -242,14 +243,14 @@ export default function PropertyDetailPage({ params }) {
 
         {/* Right Column (Contact Owner / Enquiry Card) */}
         <div className="space-y-6">
-          <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs sticky top-24">
-            <div className="flex items-center gap-3 pb-5 border-b border-slate-100">
-              <div className="w-12 h-12 rounded-full bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 font-bold text-lg">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs sticky top-24">
+            <div className="flex items-center gap-3 pb-5 border-b border-slate-100 dark:border-slate-800">
+              <div className="w-12 h-12 rounded-full bg-indigo-50 dark:bg-indigo-950/80 border border-indigo-100 dark:border-indigo-800/60 flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-bold text-lg">
                 <User className="w-6 h-6" />
               </div>
               <div>
-                <h3 className="font-bold text-slate-900">{property.owner?.name || "Property Owner"}</h3>
-                <span className="text-xs text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded-full inline-block">
+                <h3 className="font-bold text-slate-900 dark:text-white">{property.owner?.name || "Property Owner"}</h3>
+                <span className="text-xs text-emerald-700 dark:text-emerald-400 font-semibold bg-emerald-50 dark:bg-emerald-950/80 border border-transparent dark:border-emerald-800/60 px-2 py-0.5 rounded-full inline-block">
                   Verified {property.owner?.role || "Seller"}
                 </span>
               </div>
@@ -257,72 +258,76 @@ export default function PropertyDetailPage({ params }) {
 
             {/* Direct Contact info */}
             {property.owner?.phone && (
-              <div className="my-4 p-3 bg-slate-50 rounded-xl flex items-center gap-3 text-xs text-slate-700">
-                <Phone className="w-4 h-4 text-indigo-600" />
+              <div className="my-4 p-3 bg-slate-50 dark:bg-slate-800/80 border border-transparent dark:border-slate-700/60 rounded-xl flex items-center gap-3 text-xs text-slate-700 dark:text-slate-200">
+                <Phone className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                 <span className="font-mono font-semibold">{property.owner.phone}</span>
               </div>
             )}
 
             {/* Enquiry Form */}
             <form onSubmit={handleEnquirySubmit} className="space-y-3 mt-4">
-              <h4 className="text-sm font-bold text-slate-800">Send Direct Enquiry</h4>
+              <h4 className="text-sm font-bold text-slate-800 dark:text-white">Send Direct Enquiry</h4>
 
               {enquiryStatus.message && (
-                <div className={`p-3 rounded-xl text-xs ${enquiryStatus.success ? "bg-emerald-50 text-emerald-800 border border-emerald-200" : "bg-rose-50 text-rose-800 border border-rose-200"}`}>
+                <div className={`p-3 rounded-xl text-xs ${
+                  enquiryStatus.success
+                    ? "bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60"
+                    : "bg-rose-50 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-800/60"
+                }`}>
                   {enquiryStatus.message}
                 </div>
               )}
 
               <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1">Your Name</label>
+                <label className="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Your Name</label>
                 <input
                   type="text"
                   required
                   value={enquiryForm.name}
                   onChange={(e) => setEnquiryForm({ ...enquiryForm, name: e.target.value })}
                   placeholder="Enter full name"
-                  className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:bg-white"
+                  className="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-slate-800 transition"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1">Your Email</label>
+                <label className="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Your Email</label>
                 <input
                   type="email"
                   required
                   value={enquiryForm.email}
                   onChange={(e) => setEnquiryForm({ ...enquiryForm, email: e.target.value })}
                   placeholder="name@email.com"
-                  className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:bg-white"
+                  className="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-slate-800 transition"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1">Phone Number</label>
+                <label className="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Phone Number</label>
                 <input
                   type="tel"
                   required
                   value={enquiryForm.phone}
                   onChange={(e) => setEnquiryForm({ ...enquiryForm, phone: e.target.value })}
                   placeholder="+91 98765 43210"
-                  className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:bg-white"
+                  className="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-slate-800 transition"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1">Message</label>
+                <label className="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Message</label>
                 <textarea
                   rows={3}
                   value={enquiryForm.message}
                   onChange={(e) => setEnquiryForm({ ...enquiryForm, message: e.target.value })}
-                  className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:bg-white"
+                  className="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-slate-800 transition"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={enquiryStatus.submitting}
-                className="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-bold text-xs rounded-xl shadow-xs transition"
+                className="w-full py-2.5 bg-indigo-600 dark:bg-indigo-500 hover:bg-indigo-700 dark:hover:bg-indigo-600 disabled:opacity-50 text-white font-bold text-xs rounded-xl shadow-xs transition"
               >
                 {enquiryStatus.submitting ? "Submitting..." : "Contact Owner Now"}
               </button>

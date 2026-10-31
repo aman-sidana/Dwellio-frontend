@@ -19,6 +19,7 @@ import {
   Tag,
 } from "lucide-react";
 import { removeToken } from "../lib/auth";
+import { ThemeToggle } from "@/context/ThemeContext";
 
 const navItems = [
   {
@@ -166,8 +167,12 @@ export default function AdminSidebar({ user }) {
       </div>
 
       {/* Admin Profile & Logout Footer */}
-      <div className="p-4 border-t border-slate-800 bg-slate-950/60">
-        <div className="flex items-center justify-between">
+      <div className="p-4 border-t border-slate-800 bg-slate-950/60 space-y-3">
+        <div className="flex items-center justify-between px-1">
+          <span className="text-[11px] text-slate-400 font-medium">Theme</span>
+          <ThemeToggle />
+        </div>
+        <div className="flex items-center justify-between pt-2 border-t border-slate-800/80">
           <div className="flex items-center gap-2.5 min-w-0">
             <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 to-indigo-600 flex items-center justify-center text-white font-bold text-xs shadow-inner">
               {user?.name ? user.name.slice(0, 2).toUpperCase() : "SA"}
@@ -208,12 +213,15 @@ export default function AdminSidebar({ user }) {
             </span>
           </div>
         </div>
-        <button
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className="p-2 text-slate-300 hover:text-white rounded-lg hover:bg-slate-800"
-        >
-          {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+          <button
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className="p-2 text-slate-300 hover:text-white rounded-lg hover:bg-slate-800"
+          >
+            {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
+        </div>
       </div>
 
       {/* Desktop Sidebar (Fixed) */}

@@ -124,18 +124,18 @@ export default function AdminDashboardPage() {
   return (
     <div className="space-y-8 pb-12">
       {/* Top Banner Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs transition-colors">
         <div>
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span className="text-xs font-bold text-indigo-700 tracking-wider uppercase">
+            <span className="text-xs font-bold text-indigo-700 dark:text-indigo-400 tracking-wider uppercase">
               Super Admin Analytics
             </span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 mt-1">
+          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white mt-1">
             Platform Command Center
           </h1>
-          <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
             Real-time monitoring of property sales, inventory turnover, and stakeholder accounts.
           </p>
         </div>
@@ -143,14 +143,14 @@ export default function AdminDashboardPage() {
           <button
             onClick={() => fetchStats(true)}
             disabled={refreshing}
-            className="flex items-center gap-2 px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition disabled:opacity-50"
+            className="flex items-center gap-2 px-3.5 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-xl text-xs font-bold transition disabled:opacity-50"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? "animate-spin" : ""}`} />
             Refresh Data
           </button>
           <Link
             href="/admin/properties"
-            className="flex items-center gap-1.5 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold shadow-xs transition"
+            className="flex items-center gap-1.5 px-4 py-2 bg-indigo-600 dark:bg-indigo-500 hover:bg-indigo-700 dark:hover:bg-indigo-600 text-white rounded-xl text-xs font-bold shadow-xs transition"
           >
             Manage Listings
             <ChevronRight className="w-3.5 h-3.5" />
@@ -186,67 +186,67 @@ export default function AdminDashboardPage() {
         </div>
 
         {/* Total Properties Listed */}
-        <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs relative">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-xs relative">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
               Total Properties
             </span>
-            <div className="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-xl bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
               <Building2 className="w-4 h-4" />
             </div>
           </div>
           <div className="mt-3 flex items-baseline gap-2">
-            <span className="text-3xl sm:text-4xl font-black text-slate-900">
+            <span className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white">
               {properties.total}
             </span>
-            <span className="text-xs text-slate-400 font-medium">All Time</span>
+            <span className="text-xs text-slate-400 dark:text-slate-500 font-medium">All Time</span>
           </div>
-          <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600">
+          <div className="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-600 dark:text-slate-400">
             <span>Available on Portal:</span>
-            <span className="font-bold text-emerald-600">{properties.available} units</span>
+            <span className="font-bold text-emerald-600 dark:text-emerald-400">{properties.available} units</span>
           </div>
         </div>
 
         {/* Total Users / Stakeholders */}
-        <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs relative">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-xs relative">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
               Total Stakeholders
             </span>
-            <div className="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-xl bg-amber-50 dark:bg-amber-950/80 text-amber-600 dark:text-amber-400 flex items-center justify-center">
               <Users className="w-4 h-4" />
             </div>
           </div>
           <div className="mt-3 flex items-baseline gap-2">
-            <span className="text-3xl sm:text-4xl font-black text-slate-900">
+            <span className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white">
               {users.total}
             </span>
-            <span className="text-xs text-slate-400 font-medium">Registered</span>
+            <span className="text-xs text-slate-400 dark:text-slate-500 font-medium">Registered</span>
           </div>
-          <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600">
+          <div className="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-600 dark:text-slate-400">
             <span>Home Buyers:</span>
-            <span className="font-bold text-slate-900">{users.regularUsers} users</span>
+            <span className="font-bold text-slate-900 dark:text-white">{users.regularUsers} users</span>
           </div>
         </div>
 
         {/* Gross Listed Inventory Value */}
-        <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs relative">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-xs relative">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
               Gross Listed Asset Value
             </span>
-            <div className="w-8 h-8 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-xl bg-purple-50 dark:bg-purple-950/80 text-purple-600 dark:text-purple-400 flex items-center justify-center">
               <DollarSign className="w-4 h-4" />
             </div>
           </div>
           <div className="mt-3 flex items-baseline gap-2">
-            <span className="text-2xl sm:text-3xl font-black text-slate-900">
+            <span className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">
               {formatPrice(properties.totalValue)}
             </span>
           </div>
-          <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600">
+          <div className="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-600 dark:text-slate-400">
             <span>Pending Review:</span>
-            <span className="font-bold text-amber-600">{properties.pending} units</span>
+            <span className="font-bold text-amber-600 dark:text-amber-400">{properties.pending} units</span>
           </div>
         </div>
       </div>
@@ -256,82 +256,82 @@ export default function AdminDashboardPage() {
         {/* Owners Card */}
         <Link
           href="/admin/owners"
-          className="group bg-white p-4 rounded-2xl border border-slate-200 hover:border-indigo-400 hover:shadow-md transition flex items-center justify-between"
+          className="group bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 hover:border-indigo-400 dark:hover:border-indigo-600 hover:shadow-md transition flex items-center justify-between"
         >
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center group-hover:scale-105 transition-transform">
+            <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/80 text-blue-600 dark:text-blue-400 flex items-center justify-center group-hover:scale-105 transition-transform">
               <Home className="w-5 h-5" />
             </div>
             <div>
-              <div className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+              <div className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                 Property Owners
               </div>
-              <div className="text-xl font-black text-slate-900">{users.owners}</div>
+              <div className="text-xl font-black text-slate-900 dark:text-white">{users.owners}</div>
             </div>
           </div>
-          <ArrowUpRight className="w-4 h-4 text-slate-300 group-hover:text-indigo-600 transition" />
+          <ArrowUpRight className="w-4 h-4 text-slate-300 dark:text-slate-600 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition" />
         </Link>
 
         {/* Brokers Card */}
         <Link
           href="/admin/brokers"
-          className="group bg-white p-4 rounded-2xl border border-slate-200 hover:border-indigo-400 hover:shadow-md transition flex items-center justify-between"
+          className="group bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 hover:border-indigo-400 dark:hover:border-indigo-600 hover:shadow-md transition flex items-center justify-between"
         >
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center group-hover:scale-105 transition-transform">
+            <div className="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-950/80 text-amber-600 dark:text-amber-400 flex items-center justify-center group-hover:scale-105 transition-transform">
               <Briefcase className="w-5 h-5" />
             </div>
             <div>
-              <div className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+              <div className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                 Brokers & Agents
               </div>
-              <div className="text-xl font-black text-slate-900">{users.brokers}</div>
+              <div className="text-xl font-black text-slate-900 dark:text-white">{users.brokers}</div>
             </div>
           </div>
-          <ArrowUpRight className="w-4 h-4 text-slate-300 group-hover:text-indigo-600 transition" />
+          <ArrowUpRight className="w-4 h-4 text-slate-300 dark:text-slate-600 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition" />
         </Link>
 
         {/* Regular Users Card */}
         <Link
           href="/admin/users"
-          className="group bg-white p-4 rounded-2xl border border-slate-200 hover:border-indigo-400 hover:shadow-md transition flex items-center justify-between"
+          className="group bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 hover:border-indigo-400 dark:hover:border-indigo-600 hover:shadow-md transition flex items-center justify-between"
         >
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:scale-105 transition-transform">
+            <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/80 text-emerald-600 dark:text-emerald-400 flex items-center justify-center group-hover:scale-105 transition-transform">
               <Users className="w-5 h-5" />
             </div>
             <div>
-              <div className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+              <div className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                 Home Buyers / Users
               </div>
-              <div className="text-xl font-black text-slate-900">{users.regularUsers}</div>
+              <div className="text-xl font-black text-slate-900 dark:text-white">{users.regularUsers}</div>
             </div>
           </div>
-          <ArrowUpRight className="w-4 h-4 text-slate-300 group-hover:text-indigo-600 transition" />
+          <ArrowUpRight className="w-4 h-4 text-slate-300 dark:text-slate-600 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition" />
         </Link>
       </div>
 
       {/* Visual Analytics Bars */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Property Status Distribution */}
-        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-xs">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h2 className="text-base font-bold text-slate-900">
+              <h2 className="text-base font-bold text-slate-900 dark:text-white">
                 Property Inventory Breakdown
               </h2>
-              <p className="text-xs text-slate-500">Distribution by current listing status</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400">Distribution by current listing status</p>
             </div>
             <Link
               href="/admin/properties"
-              className="text-xs font-bold text-indigo-600 hover:text-indigo-700 flex items-center gap-1"
+              className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 flex items-center gap-1"
             >
               View All <ArrowUpRight className="w-3.5 h-3.5" />
             </Link>
           </div>
 
           {/* Multi-colored Progress Bar */}
-          <div className="w-full h-4 rounded-full bg-slate-100 flex overflow-hidden mb-4 shadow-inner">
+          <div className="w-full h-4 rounded-full bg-slate-100 dark:bg-slate-800 flex overflow-hidden mb-4 shadow-inner">
             <div
               style={{ width: `${soldPercent}%` }}
               className="bg-emerald-500 transition-all duration-500"
@@ -356,63 +356,63 @@ export default function AdminDashboardPage() {
 
           {/* Legend Grid */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-            <div className="p-2.5 rounded-xl bg-emerald-50 border border-emerald-100">
-              <div className="flex items-center gap-1.5 text-emerald-800 font-bold">
+            <div className="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-100 dark:border-emerald-800/60">
+              <div className="flex items-center gap-1.5 text-emerald-800 dark:text-emerald-300 font-bold">
                 <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
                 Sold
               </div>
-              <div className="text-lg font-black text-emerald-900 mt-1">{properties.sold}</div>
-              <div className="text-[10px] text-emerald-600 font-medium">{soldPercent}% of total</div>
+              <div className="text-lg font-black text-emerald-900 dark:text-emerald-100 mt-1">{properties.sold}</div>
+              <div className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">{soldPercent}% of total</div>
             </div>
 
-            <div className="p-2.5 rounded-xl bg-indigo-50 border border-indigo-100">
-              <div className="flex items-center gap-1.5 text-indigo-800 font-bold">
+            <div className="p-2.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-100 dark:border-indigo-800/60">
+              <div className="flex items-center gap-1.5 text-indigo-800 dark:text-indigo-300 font-bold">
                 <span className="w-2.5 h-2.5 rounded-full bg-indigo-600"></span>
                 Available
               </div>
-              <div className="text-lg font-black text-indigo-900 mt-1">{properties.available}</div>
-              <div className="text-[10px] text-indigo-600 font-medium">{availPercent}% of total</div>
+              <div className="text-lg font-black text-indigo-900 dark:text-indigo-100 mt-1">{properties.available}</div>
+              <div className="text-[10px] text-indigo-600 dark:text-indigo-400 font-medium">{availPercent}% of total</div>
             </div>
 
-            <div className="p-2.5 rounded-xl bg-amber-50 border border-amber-100">
-              <div className="flex items-center gap-1.5 text-amber-800 font-bold">
+            <div className="p-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/60 border border-amber-100 dark:border-amber-800/60">
+              <div className="flex items-center gap-1.5 text-amber-800 dark:text-amber-300 font-bold">
                 <span className="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
                 Pending
               </div>
-              <div className="text-lg font-black text-amber-900 mt-1">{properties.pending}</div>
-              <div className="text-[10px] text-amber-600 font-medium">{pendingPercent}% of total</div>
+              <div className="text-lg font-black text-amber-900 dark:text-amber-100 mt-1">{properties.pending}</div>
+              <div className="text-[10px] text-amber-600 dark:text-amber-400 font-medium">{pendingPercent}% of total</div>
             </div>
 
-            <div className="p-2.5 rounded-xl bg-purple-50 border border-purple-100">
-              <div className="flex items-center gap-1.5 text-purple-800 font-bold">
+            <div className="p-2.5 rounded-xl bg-purple-50 dark:bg-purple-950/60 border border-purple-100 dark:border-purple-800/60">
+              <div className="flex items-center gap-1.5 text-purple-800 dark:text-purple-300 font-bold">
                 <span className="w-2.5 h-2.5 rounded-full bg-purple-500"></span>
                 Rented
               </div>
-              <div className="text-lg font-black text-purple-900 mt-1">{properties.rented}</div>
-              <div className="text-[10px] text-purple-600 font-medium">{rentedPercent}% of total</div>
+              <div className="text-lg font-black text-purple-900 dark:text-purple-100 mt-1">{properties.rented}</div>
+              <div className="text-[10px] text-purple-600 dark:text-purple-400 font-medium">{rentedPercent}% of total</div>
             </div>
           </div>
         </div>
 
         {/* Stakeholder Composition */}
-        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-xs">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h2 className="text-base font-bold text-slate-900">
+              <h2 className="text-base font-bold text-slate-900 dark:text-white">
                 User Role Composition
               </h2>
-              <p className="text-xs text-slate-500">Breakdown of registered accounts</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400">Breakdown of registered accounts</p>
             </div>
             <Link
               href="/admin/users"
-              className="text-xs font-bold text-indigo-600 hover:text-indigo-700 flex items-center gap-1"
+              className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 flex items-center gap-1"
             >
               Manage Users <ArrowUpRight className="w-3.5 h-3.5" />
             </Link>
           </div>
 
           {/* Multi-colored Progress Bar */}
-          <div className="w-full h-4 rounded-full bg-slate-100 flex overflow-hidden mb-4 shadow-inner">
+          <div className="w-full h-4 rounded-full bg-slate-100 dark:bg-slate-800 flex overflow-hidden mb-4 shadow-inner">
             <div
               style={{ width: `${ownerPercent}%` }}
               className="bg-blue-600 transition-all duration-500"
@@ -434,19 +434,19 @@ export default function AdminDashboardPage() {
           <div className="grid grid-cols-3 gap-3 text-xs">
             <Link
               href="/admin/owners"
-              className="p-3 rounded-xl bg-blue-50/70 border border-blue-100 hover:bg-blue-100/60 transition"
+              className="p-3 rounded-xl bg-blue-50/70 dark:bg-blue-950/60 border border-blue-100 dark:border-blue-800/60 hover:bg-blue-100/60 dark:hover:bg-blue-900/60 transition"
             >
-              <div className="flex items-center gap-1.5 text-blue-800 font-bold">
+              <div className="flex items-center gap-1.5 text-blue-800 dark:text-blue-300 font-bold">
                 <span className="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
                 Owners
               </div>
-              <div className="text-xl font-black text-blue-900 mt-1">{users.owners}</div>
-              <div className="text-[10px] text-blue-600 font-medium">{ownerPercent}% of users</div>
+              <div className="text-xl font-black text-blue-900 dark:text-blue-100 mt-1">{users.owners}</div>
+              <div className="text-[10px] text-blue-600 dark:text-blue-400 font-medium">{ownerPercent}% of users</div>
             </Link>
 
             <Link
               href="/admin/brokers"
-              className="p-3 rounded-xl bg-amber-50/70 border border-amber-100 hover:bg-amber-100/60 transition"
+              className="p-3 rounded-xl bg-amber-50/70 dark:bg-amber-950/60 border border-amber-100 dark:border-amber-800/60 hover:bg-amber-100/60 dark:hover:bg-amber-900/60 transition"
             >
               <div className="flex items-center gap-1.5 text-amber-800 font-bold">
                 <span className="w-2.5 h-2.5 rounded-full bg-amber-500"></span>

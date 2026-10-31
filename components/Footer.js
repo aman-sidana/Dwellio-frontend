@@ -12,7 +12,7 @@ export default function Footer() {
   }
 
   return (
-    <footer className="w-full bg-slate-900 text-slate-400 text-sm border-t border-slate-800 mt-auto">
+    <footer className="w-full bg-slate-900 dark:bg-slate-950 text-slate-400 text-sm border-t border-slate-800 dark:border-slate-800/80 mt-auto transition-colors duration-200">
       <div className="w-full px-4 sm:px-8 lg:px-12 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           {/* Brand */}

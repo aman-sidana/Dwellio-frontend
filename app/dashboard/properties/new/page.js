@@ -141,26 +141,26 @@ function NewPropertyContent({ user }) {
           {/* Section 1: Listing Intent & Type */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">Listing Purpose</label>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Listing Purpose</label>
               <select
                 value={form.listingType}
                 onChange={(e) => setForm({ ...form, listingType: e.target.value })}
-                className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 font-medium"
+                className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl focus:ring-2 focus:ring-indigo-500 font-medium"
               >
-                <option value="sale">Sell (For Sale)</option>
-                <option value="rent">Rent (For Lease)</option>
+                <option value="sale" className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">Sell (For Sale)</option>
+                <option value="rent" className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">Rent (For Lease)</option>
               </select>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">Property Category</label>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Property Category</label>
               <select
                 value={form.propertyType}
                 onChange={(e) => setForm({ ...form, propertyType: e.target.value })}
-                className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 font-medium"
+                className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl focus:ring-2 focus:ring-indigo-500 font-medium"
               >
                 {PROPERTY_TYPES.map((pt) => (
-                  <option key={pt.value} value={pt.value}>{pt.label}</option>
+                  <option key={pt.value} value={pt.value} className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">{pt.label}</option>
                 ))}
               </select>
             </div>
@@ -168,21 +168,21 @@ function NewPropertyContent({ user }) {
 
           {/* Title */}
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Listing Title</label>
+            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Listing Title</label>
             <input
               type="text"
               required
               value={form.title}
               onChange={(e) => setForm({ ...form, title: e.target.value })}
               placeholder="e.g. Spacious 3 BHK Sea-Facing Apartment in Bandra West"
-              className="w-full px-4 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-4 py-2.5 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-slate-800 transition"
             />
           </div>
 
           {/* Pricing & Area */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                 {form.listingType === "rent" ? "Monthly Rent (₹)" : "Expected Price (₹)"}
               </label>
               <input
@@ -191,19 +191,19 @@ function NewPropertyContent({ user }) {
                 value={form.price}
                 onChange={(e) => setForm({ ...form, price: e.target.value })}
                 placeholder="e.g. 7500000"
-                className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-slate-800 transition"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">Carpet / Super Area (sq.ft)</label>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Carpet / Super Area (sq.ft)</label>
               <input
                 type="number"
                 required
                 value={form.areaSqFt}
                 onChange={(e) => setForm({ ...form, areaSqFt: e.target.value })}
                 placeholder="e.g. 1450"
-                className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-slate-800 transition"
               />
             </div>
           </div>
@@ -211,38 +211,38 @@ function NewPropertyContent({ user }) {
           {/* Configurations: BHK, Bathrooms, Furnishing */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">Bedrooms (BHK)</label>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Bedrooms (BHK)</label>
               <select
                 value={form.bedrooms}
                 onChange={(e) => setForm({ ...form, bedrooms: e.target.value })}
-                className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl font-medium"
+                className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl font-medium"
               >
                 {BHK_OPTIONS.map((bhk) => (
-                  <option key={bhk.value} value={bhk.value}>{bhk.label}</option>
+                  <option key={bhk.value} value={bhk.value} className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">{bhk.label}</option>
                 ))}
               </select>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">Bathrooms</label>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Bathrooms</label>
               <input
                 type="number"
                 value={form.bathrooms}
                 onChange={(e) => setForm({ ...form, bathrooms: e.target.value })}
-                className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl"
+                className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl focus:ring-2 focus:ring-indigo-500"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">Furnishing</label>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Furnishing</label>
               <select
                 value={form.furnishing}
                 onChange={(e) => setForm({ ...form, furnishing: e.target.value })}
-                className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl font-medium"
+                className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl font-medium"
               >
-                <option value="unfurnished">Unfurnished</option>
-                <option value="semi_furnished">Semi-Furnished</option>
-                <option value="fully_furnished">Fully Furnished</option>
+                <option value="unfurnished" className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">Unfurnished</option>
+                <option value="semi_furnished" className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">Semi-Furnished</option>
+                <option value="fully_furnished" className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">Fully Furnished</option>
               </select>
             </div>
           </div>
@@ -250,27 +250,27 @@ function NewPropertyContent({ user }) {
           {/* Location Details */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">City</label>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">City</label>
               <select
                 value={form.city}
                 onChange={(e) => setForm({ ...form, city: e.target.value })}
-                className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl font-medium"
+                className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl font-medium"
               >
                 {CITIES.map((c) => (
-                  <option key={c} value={c}>{c}</option>
+                  <option key={c} value={c} className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">{c}</option>
                 ))}
               </select>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">Locality / Sector</label>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Locality / Sector</label>
               <input
                 type="text"
                 required
                 value={form.locality}
                 onChange={(e) => setForm({ ...form, locality: e.target.value })}
                 placeholder="e.g. Whitefield or Indiranagar"
-                className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-slate-800 transition"
               />
             </div>
           </div>
@@ -278,25 +278,25 @@ function NewPropertyContent({ user }) {
           {/* Property Images Upload (Cloudinary) */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <label className="block text-xs font-bold text-slate-700">
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
                 Property Photos (Cloudinary Upload)
               </label>
-              <span className="text-xs text-slate-400">
+              <span className="text-xs text-slate-400 dark:text-slate-500">
                 {uploadedImages.length} uploaded
               </span>
             </div>
 
             {uploadError && (
-              <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-700">
+              <div className="p-3 rounded-xl bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-900/50 text-xs text-rose-700 dark:text-rose-300">
                 {uploadError}
               </div>
             )}
 
             {/* Uploaded Images Preview Grid */}
             {uploadedImages.length > 0 && (
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-3 bg-slate-50 border border-slate-200 rounded-xl">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-3 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl">
                 {uploadedImages.map((url, idx) => (
-                  <div key={idx} className="relative group aspect-4/3 rounded-lg overflow-hidden border border-slate-200 bg-slate-100">
+                  <div key={idx} className="relative group aspect-4/3 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800">
                     <img src={url} alt={`Upload ${idx + 1}`} className="w-full h-full object-cover" />
                     {idx === 0 && (
                       <span className="absolute top-1 left-1 px-1.5 py-0.5 text-[10px] font-bold bg-emerald-600 text-white rounded shadow-xs">
@@ -318,7 +318,9 @@ function NewPropertyContent({ user }) {
 
             {/* Drop / Select Area */}
             <label className={`flex flex-col items-center justify-center border-2 border-dashed rounded-xl p-6 transition cursor-pointer ${
-              uploading ? "bg-slate-100 border-slate-300 opacity-60 pointer-events-none" : "border-slate-300 hover:border-indigo-500 bg-slate-50/50 hover:bg-indigo-50/30"
+              uploading
+                ? "bg-slate-100 dark:bg-slate-800/50 border-slate-300 dark:border-slate-700 opacity-60 pointer-events-none"
+                : "border-slate-300 dark:border-slate-700 hover:border-indigo-500 dark:hover:border-indigo-400 bg-slate-50/50 dark:bg-slate-800/40 hover:bg-indigo-50/30 dark:hover:bg-slate-800/70"
             }`}>
               <input
                 type="file"
@@ -329,19 +331,19 @@ function NewPropertyContent({ user }) {
                 className="hidden"
               />
               {uploading ? (
-                <div className="flex flex-col items-center gap-2 text-slate-500">
-                  <Loader2 className="w-6 h-6 animate-spin text-indigo-600" />
+                <div className="flex flex-col items-center gap-2 text-slate-500 dark:text-slate-400">
+                  <Loader2 className="w-6 h-6 animate-spin text-indigo-600 dark:text-indigo-400" />
                   <p className="text-xs font-semibold">Uploading to Cloudinary CDN...</p>
                 </div>
               ) : (
                 <div className="flex flex-col items-center gap-1.5 text-center">
-                  <div className="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 mb-1">
+                  <div className="w-10 h-10 rounded-full bg-indigo-50 dark:bg-indigo-950/80 border border-transparent dark:border-indigo-800/40 flex items-center justify-center text-indigo-600 dark:text-indigo-400 mb-1">
                     <UploadCloud className="w-5 h-5" />
                   </div>
-                  <p className="text-xs font-semibold text-slate-700">
+                  <p className="text-xs font-semibold text-slate-700 dark:text-slate-200">
                     Click to browse or drop property photos
                   </p>
-                  <p className="text-[11px] text-slate-400">
+                  <p className="text-[11px] text-slate-400 dark:text-slate-500">
                     Supports JPG, PNG, WEBP (Up to 10 photos, 10MB each)
                   </p>
                 </div>
@@ -350,7 +352,7 @@ function NewPropertyContent({ user }) {
 
             {/* Alternative Direct URL Option */}
             <div className="pt-1">
-              <label className="block text-[11px] text-slate-500 mb-1">
+              <label className="block text-[11px] text-slate-500 dark:text-slate-400 mb-1">
                 Or paste an external Image URL (e.g. Unsplash)
               </label>
               <input
@@ -358,27 +360,27 @@ function NewPropertyContent({ user }) {
                 value={form.imageUrl}
                 onChange={(e) => setForm({ ...form, imageUrl: e.target.value })}
                 placeholder="https://images.unsplash.com/... (optional)"
-                className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-slate-800 transition"
               />
             </div>
           </div>
 
           {/* Description */}
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Property Description</label>
+            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Property Description</label>
             <textarea
               rows={4}
               value={form.description}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
               placeholder="Describe amenities, highlights, neighborhood, transport connectivity..."
-              className="w-full px-4 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-4 py-2.5 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-slate-800 transition"
             />
           </div>
 
           <button
             type="submit"
             disabled={status.loading}
-            className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-bold text-sm rounded-xl transition shadow-xs"
+            className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600 disabled:opacity-50 text-white font-bold text-sm rounded-xl transition shadow-xs cursor-pointer"
           >
             {status.loading ? "Publishing Property..." : "Publish Listing for Free"}
           </button>

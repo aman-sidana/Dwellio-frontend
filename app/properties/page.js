@@ -60,38 +60,38 @@ export default function PropertiesPage({ searchParams }) {
   return (
     <div className="w-full px-4 sm:px-8 lg:px-12 py-8">
       {/* Search Header */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-4 sm:p-6 shadow-xs mb-8">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-4 sm:p-6 shadow-xs mb-8 transition-colors">
         <form onSubmit={handleSearchSubmit} className="flex flex-col md:flex-row gap-3">
           <div className="flex-1 relative">
-            <Search className="w-5 h-5 absolute left-3.5 top-3.5 text-slate-400" />
+            <Search className="w-5 h-5 absolute left-3.5 top-3.5 text-slate-400 dark:text-slate-500" />
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search by locality, landmark, or project name..."
-              className="w-full pl-11 pr-4 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:bg-white transition"
+              className="w-full pl-11 pr-4 py-2.5 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 rounded-xl focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-slate-800 transition"
             />
           </div>
           <button
             type="submit"
-            className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm rounded-xl shadow-xs transition"
+            className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white font-semibold text-sm rounded-xl shadow-xs transition"
           >
             Search Properties
           </button>
         </form>
 
         {/* Quick Filter Tabs */}
-        <div className="flex flex-wrap items-center gap-2 mt-4 pt-4 border-t border-slate-100 text-xs">
-          <span className="font-semibold text-slate-500 mr-2 flex items-center gap-1">
+        <div className="flex flex-wrap items-center gap-2 mt-4 pt-4 border-t border-slate-100 dark:border-slate-800 text-xs">
+          <span className="font-semibold text-slate-500 dark:text-slate-400 mr-2 flex items-center gap-1">
             <Filter className="w-3.5 h-3.5" /> Filter by:
           </span>
 
           {/* Purpose Tab */}
-          <div className="inline-flex rounded-lg border border-slate-200 p-0.5 bg-slate-50">
+          <div className="inline-flex rounded-lg border border-slate-200 dark:border-slate-700 p-0.5 bg-slate-50 dark:bg-slate-800">
             <button
               onClick={() => setListingType("")}
               className={`px-3 py-1 rounded-md font-semibold transition ${
-                listingType === "" ? "bg-white text-indigo-600 shadow-xs" : "text-slate-600 hover:text-slate-900"
+                listingType === "" ? "bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-xs" : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
               }`}
             >
               All
@@ -99,7 +99,7 @@ export default function PropertiesPage({ searchParams }) {
             <button
               onClick={() => setListingType("sale")}
               className={`px-3 py-1 rounded-md font-semibold transition ${
-                listingType === "sale" ? "bg-white text-indigo-600 shadow-xs" : "text-slate-600 hover:text-slate-900"
+                listingType === "sale" ? "bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-xs" : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
               }`}
             >
               Buy
@@ -107,7 +107,7 @@ export default function PropertiesPage({ searchParams }) {
             <button
               onClick={() => setListingType("rent")}
               className={`px-3 py-1 rounded-md font-semibold transition ${
-                listingType === "rent" ? "bg-white text-indigo-600 shadow-xs" : "text-slate-600 hover:text-slate-900"
+                listingType === "rent" ? "bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-xs" : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
               }`}
             >
               Rent
@@ -118,11 +118,11 @@ export default function PropertiesPage({ searchParams }) {
           <select
             value={city}
             onChange={(e) => setCity(e.target.value)}
-            className="px-3 py-1 bg-white border border-slate-200 rounded-lg text-slate-700 font-medium focus:ring-2 focus:ring-indigo-500"
+            className="px-3 py-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-200 font-medium focus:ring-2 focus:ring-indigo-500"
           >
-            <option value="">All Cities</option>
+            <option value="" className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">All Cities</option>
             {CITIES.map((c) => (
-              <option key={c} value={c}>{c}</option>
+              <option key={c} value={c} className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">{c}</option>
             ))}
           </select>
 
@@ -130,11 +130,11 @@ export default function PropertiesPage({ searchParams }) {
           <select
             value={propertyType}
             onChange={(e) => setPropertyType(e.target.value)}
-            className="px-3 py-1 bg-white border border-slate-200 rounded-lg text-slate-700 font-medium focus:ring-2 focus:ring-indigo-500"
+            className="px-3 py-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-200 font-medium focus:ring-2 focus:ring-indigo-500"
           >
-            <option value="">All Property Types</option>
+            <option value="" className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">All Property Types</option>
             {PROPERTY_TYPES.map((pt) => (
-              <option key={pt.value} value={pt.value}>{pt.label}</option>
+              <option key={pt.value} value={pt.value} className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">{pt.label}</option>
             ))}
           </select>
 
@@ -142,11 +142,11 @@ export default function PropertiesPage({ searchParams }) {
           <select
             value={bedrooms}
             onChange={(e) => setBedrooms(e.target.value)}
-            className="px-3 py-1 bg-white border border-slate-200 rounded-lg text-slate-700 font-medium focus:ring-2 focus:ring-indigo-500"
+            className="px-3 py-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-200 font-medium focus:ring-2 focus:ring-indigo-500"
           >
-            <option value="">Any BHK</option>
+            <option value="" className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">Any BHK</option>
             {BHK_OPTIONS.map((bhk) => (
-              <option key={bhk.value} value={bhk.value}>{bhk.label}</option>
+              <option key={bhk.value} value={bhk.value} className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">{bhk.label}</option>
             ))}
           </select>
 
@@ -159,7 +159,7 @@ export default function PropertiesPage({ searchParams }) {
                 setBedrooms("");
                 setSearch("");
               }}
-              className="ml-auto text-rose-600 hover:text-rose-700 font-semibold underline text-xs"
+              className="ml-auto text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 font-semibold underline text-xs"
             >
               Reset Filters
             </button>
@@ -170,10 +170,10 @@ export default function PropertiesPage({ searchParams }) {
       {/* Results Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
             {city ? `Properties in ${city}` : "All Real Estate Properties"}
           </h1>
-          <p className="text-sm text-slate-500 mt-0.5">
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
             Showing {properties.length} {properties.length === 1 ? "property" : "properties"} available
           </p>
         </div>
@@ -183,21 +183,21 @@ export default function PropertiesPage({ searchParams }) {
       {loading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1, 2, 3, 4, 5, 6].map((i) => (
-            <div key={i} className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs animate-pulse">
-              <div className="h-52 bg-slate-200"></div>
+            <div key={i} className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-xs animate-pulse">
+              <div className="h-52 bg-slate-200 dark:bg-slate-800"></div>
               <div className="p-5 space-y-3">
-                <div className="h-5 bg-slate-200 rounded w-1/3"></div>
-                <div className="h-4 bg-slate-200 rounded w-3/4"></div>
-                <div className="h-4 bg-slate-200 rounded w-1/2"></div>
+                <div className="h-5 bg-slate-200 dark:bg-slate-800 rounded w-1/3"></div>
+                <div className="h-4 bg-slate-200 dark:bg-slate-800 rounded w-3/4"></div>
+                <div className="h-4 bg-slate-200 dark:bg-slate-800 rounded w-1/2"></div>
               </div>
             </div>
           ))}
         </div>
       ) : properties.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-slate-200 p-12 text-center max-w-lg mx-auto">
-          <Building className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-          <h3 className="text-lg font-bold text-slate-800">No properties matched your search</h3>
-          <p className="text-sm text-slate-500 mt-1">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-12 text-center max-w-lg mx-auto shadow-xs">
+          <Building className="w-12 h-12 text-slate-300 dark:text-slate-600 mx-auto mb-3" />
+          <h3 className="text-lg font-bold text-slate-800 dark:text-white">No properties matched your search</h3>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
             Try adjusting your search filters or browse other popular cities.
           </p>
           <button
@@ -208,7 +208,7 @@ export default function PropertiesPage({ searchParams }) {
               setBedrooms("");
               setSearch("");
             }}
-            className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-xl text-xs font-semibold hover:bg-indigo-700 transition"
+            className="mt-4 px-4 py-2 bg-indigo-600 dark:bg-indigo-500 hover:bg-indigo-700 dark:hover:bg-indigo-600 text-white rounded-xl text-xs font-semibold transition"
           >
             Clear All Filters
           </button>
@@ -220,10 +220,10 @@ export default function PropertiesPage({ searchParams }) {
             return (
               <div
                 key={p.propertyId}
-                className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs hover:shadow-md transition group flex flex-col"
+                className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-xs hover:shadow-xl dark:hover:border-slate-700 transition duration-300 group flex flex-col"
               >
                 {/* Image & Badges */}
-                <div className="relative h-56 w-full bg-slate-100 overflow-hidden">
+                <div className="relative h-56 w-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
                   <Image
                     src={primaryImg}
                     alt={p.title}
@@ -250,53 +250,53 @@ export default function PropertiesPage({ searchParams }) {
                 <div className="p-5 flex-1 flex flex-col justify-between">
                   <div>
                     <div className="flex items-baseline justify-between mb-1">
-                      <div className="text-2xl font-extrabold text-slate-900">
+                      <div className="text-2xl font-extrabold text-slate-900 dark:text-white">
                         {p.priceDisplay || `₹${Number(p.price).toLocaleString("en-IN")}`}
                       </div>
-                      <span className="text-xs text-slate-500 font-medium capitalize">
+                      <span className="text-xs text-slate-500 dark:text-slate-400 font-medium capitalize">
                         {p.propertyType?.replace("_", " ")}
                       </span>
                     </div>
 
                     <Link href={`/properties/${p.propertyId}`}>
-                      <h3 className="font-bold text-slate-900 text-base line-clamp-1 hover:text-indigo-600 transition">
+                      <h3 className="font-bold text-slate-900 dark:text-slate-100 text-base line-clamp-1 hover:text-indigo-600 dark:hover:text-indigo-400 transition">
                         {p.title}
                       </h3>
                     </Link>
 
-                    <p className="text-xs text-slate-500 flex items-center gap-1 mt-1">
-                      <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                    <p className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1 mt-1">
+                      <MapPin className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 shrink-0" />
                       {p.locality}, {p.city}
                     </p>
 
                     {/* Features row */}
-                    <div className="flex items-center gap-4 mt-4 pt-3 border-t border-slate-100 text-xs text-slate-600 font-medium">
+                    <div className="flex items-center gap-4 mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-300 font-medium">
                       {p.bedrooms && (
                         <span className="flex items-center gap-1">
-                          <Bed className="w-4 h-4 text-indigo-600" />
+                          <Bed className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                           {p.bedrooms} Beds
                         </span>
                       )}
                       {p.bathrooms && (
                         <span className="flex items-center gap-1">
-                          <Bath className="w-4 h-4 text-indigo-600" />
+                          <Bath className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                           {p.bathrooms} Baths
                         </span>
                       )}
                       <span className="flex items-center gap-1">
-                        <Maximize2 className="w-4 h-4 text-indigo-600" />
+                        <Maximize2 className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                         {Number(p.areaSqFt).toLocaleString()} sq.ft
                       </span>
                     </div>
                   </div>
 
-                  <div className="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between">
-                    <span className="text-xs text-slate-400 capitalize">
-                      Owner: <span className="text-slate-700 font-medium">{p.owner?.name || "Verified Seller"}</span>
+                  <div className="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                    <span className="text-xs text-slate-400 dark:text-slate-500 capitalize">
+                      Owner: <span className="text-slate-700 dark:text-slate-300 font-medium">{p.owner?.name || "Verified Seller"}</span>
                     </span>
                     <Link
                       href={`/properties/${p.propertyId}`}
-                      className="px-3.5 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg text-xs font-semibold transition"
+                      className="px-3.5 py-1.5 bg-indigo-50 dark:bg-indigo-950/70 hover:bg-indigo-100 dark:hover:bg-indigo-900/70 text-indigo-700 dark:text-indigo-300 border border-transparent dark:border-indigo-800/40 rounded-lg text-xs font-semibold transition"
                     >
                       View Details
                     </Link>

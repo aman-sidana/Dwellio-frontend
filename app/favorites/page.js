@@ -37,31 +37,31 @@ function FavoritesContent({ user }) {
   return (
     <div className="w-full px-4 sm:px-8 lg:px-12 py-10">
       <div className="flex items-center gap-3 mb-8">
-        <div className="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center">
-          <Heart className="w-5 h-5 fill-rose-600" />
+        <div className="w-10 h-10 rounded-xl bg-rose-50 dark:bg-rose-950/70 border border-transparent dark:border-rose-800/40 text-rose-600 dark:text-rose-400 flex items-center justify-center">
+          <Heart className="w-5 h-5 fill-rose-600 dark:fill-rose-400" />
         </div>
         <div>
-          <h1 className="text-2xl font-extrabold text-slate-900">Saved Properties</h1>
-          <p className="text-sm text-slate-500">Track and review all the homes you have shortlisted</p>
+          <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white">Saved Properties</h1>
+          <p className="text-sm text-slate-500 dark:text-slate-400">Track and review all the homes you have shortlisted</p>
         </div>
       </div>
 
       {loading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="h-80 bg-slate-100 rounded-2xl animate-pulse"></div>
+            <div key={i} className="h-80 bg-slate-100 dark:bg-slate-900 border border-transparent dark:border-slate-800 rounded-2xl animate-pulse"></div>
           ))}
         </div>
       ) : favorites.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-slate-200 p-12 text-center max-w-lg mx-auto shadow-xs">
-          <Heart className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-          <h3 className="text-lg font-bold text-slate-800">No properties saved yet</h3>
-          <p className="text-sm text-slate-500 mt-1 mb-6">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-12 text-center max-w-lg mx-auto shadow-xs">
+          <Heart className="w-12 h-12 text-slate-300 dark:text-slate-600 mx-auto mb-3" />
+          <h3 className="text-lg font-bold text-slate-800 dark:text-white">No properties saved yet</h3>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 mb-6">
             Click the heart icon on any property card to save it here for quick access later.
           </p>
           <Link
             href="/properties"
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-600 text-white rounded-xl text-xs font-semibold hover:bg-indigo-700 transition"
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-600 dark:bg-indigo-500 hover:bg-indigo-700 dark:hover:bg-indigo-600 text-white rounded-xl text-xs font-semibold transition"
           >
             Explore Properties <ArrowRight className="w-4 h-4" />
           </Link>
@@ -75,9 +75,9 @@ function FavoritesContent({ user }) {
             return (
               <div
                 key={fav.favoriteId || p.propertyId}
-                className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs hover:shadow-md transition group flex flex-col"
+                className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-xs hover:shadow-xl dark:hover:border-slate-700 transition duration-300 group flex flex-col"
               >
-                <div className="relative h-56 w-full bg-slate-100 overflow-hidden">
+                <div className="relative h-56 w-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
                   <Image
                     src={primaryImg}
                     alt={p.title}
@@ -102,43 +102,43 @@ function FavoritesContent({ user }) {
                 <div className="p-5 flex-1 flex flex-col justify-between">
                   <div>
                     <div className="flex items-baseline justify-between mb-1">
-                      <div className="text-2xl font-black text-slate-900">
+                      <div className="text-2xl font-black text-slate-900 dark:text-white">
                         {p.priceDisplay || `₹${Number(p.price).toLocaleString("en-IN")}`}
                       </div>
-                      <span className="text-xs text-slate-500 font-medium capitalize">
+                      <span className="text-xs text-slate-500 dark:text-slate-400 font-medium capitalize">
                         {p.propertyType?.replace("_", " ")}
                       </span>
                     </div>
 
                     <Link href={`/properties/${p.propertyId}`}>
-                      <h3 className="font-bold text-slate-900 text-base line-clamp-1 hover:text-indigo-600 transition">
+                      <h3 className="font-bold text-slate-900 dark:text-slate-100 text-base line-clamp-1 hover:text-indigo-600 dark:hover:text-indigo-400 transition">
                         {p.title}
                       </h3>
                     </Link>
 
-                    <p className="text-xs text-slate-500 flex items-center gap-1 mt-1">
-                      <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                    <p className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1 mt-1">
+                      <MapPin className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 shrink-0" />
                       {p.locality}, {p.city}
                     </p>
 
-                    <div className="flex items-center gap-4 mt-4 pt-3 border-t border-slate-100 text-xs text-slate-600 font-medium">
+                    <div className="flex items-center gap-4 mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-300 font-medium">
                       {p.bedrooms && (
                         <span className="flex items-center gap-1">
-                          <Bed className="w-4 h-4 text-indigo-600" />
+                          <Bed className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                           {p.bedrooms} Beds
                         </span>
                       )}
                       <span className="flex items-center gap-1">
-                        <Maximize2 className="w-4 h-4 text-indigo-600" />
+                        <Maximize2 className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                         {Number(p.areaSqFt).toLocaleString()} sq.ft
                       </span>
                     </div>
                   </div>
 
-                  <div className="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between">
+                  <div className="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
                     <Link
                       href={`/properties/${p.propertyId}`}
-                      className="text-xs font-bold text-indigo-600 hover:text-indigo-800 transition"
+                      className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition"
                     >
                       View Details →
                     </Link>
