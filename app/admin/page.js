@@ -448,24 +448,24 @@ export default function AdminDashboardPage() {
               href="/admin/brokers"
               className="p-3 rounded-xl bg-amber-50/70 dark:bg-amber-950/60 border border-amber-100 dark:border-amber-800/60 hover:bg-amber-100/60 dark:hover:bg-amber-900/60 transition"
             >
-              <div className="flex items-center gap-1.5 text-amber-800 font-bold">
+              <div className="flex items-center gap-1.5 text-amber-800 dark:text-amber-300 font-bold">
                 <span className="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
                 Brokers
               </div>
-              <div className="text-xl font-black text-amber-900 mt-1">{users.brokers}</div>
-              <div className="text-[10px] text-amber-600 font-medium">{brokerPercent}% of users</div>
+              <div className="text-xl font-black text-amber-900 dark:text-amber-100 mt-1">{users.brokers}</div>
+              <div className="text-[10px] text-amber-600 dark:text-amber-400 font-medium">{brokerPercent}% of users</div>
             </Link>
 
             <Link
               href="/admin/users"
-              className="p-3 rounded-xl bg-emerald-50/70 border border-emerald-100 hover:bg-emerald-100/60 transition"
+              className="p-3 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/60 border border-emerald-100 dark:border-emerald-800/60 hover:bg-emerald-100/60 dark:hover:bg-emerald-900/60 transition"
             >
-              <div className="flex items-center gap-1.5 text-emerald-800 font-bold">
+              <div className="flex items-center gap-1.5 text-emerald-800 dark:text-emerald-300 font-bold">
                 <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
                 Buyers
               </div>
-              <div className="text-xl font-black text-emerald-900 mt-1">{users.regularUsers}</div>
-              <div className="text-[10px] text-emerald-600 font-medium">{userPercent}% of users</div>
+              <div className="text-xl font-black text-emerald-900 dark:text-emerald-100 mt-1">{users.regularUsers}</div>
+              <div className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">{userPercent}% of users</div>
             </Link>
           </div>
         </div>
@@ -474,54 +474,54 @@ export default function AdminDashboardPage() {
       {/* Tables: Recent Properties & Stakeholders */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Recent Properties */}
-        <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs">
-          <div className="p-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
-            <h3 className="font-black text-xs uppercase tracking-wider text-slate-800">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-xs transition-colors">
+          <div className="p-4 bg-slate-50 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+            <h3 className="font-black text-xs uppercase tracking-wider text-slate-800 dark:text-slate-200">
               Recent Listings & Sold Activity
             </h3>
             <Link
               href="/admin/properties"
-              className="text-xs font-bold text-indigo-600 hover:text-indigo-700"
+              className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition"
             >
               See All
             </Link>
           </div>
-          <div className="divide-y divide-slate-100">
+          <div className="divide-y divide-slate-100 dark:divide-slate-800/60">
             {stats?.recentProperties?.length > 0 ? (
               stats.recentProperties.map((p) => {
                 const isSold = p.status === "sold";
                 return (
                   <div
                     key={p.propertyId}
-                    className="p-3.5 hover:bg-slate-50 transition flex items-center justify-between gap-3 text-xs"
+                    className="p-3.5 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition flex items-center justify-between gap-3 text-xs"
                   >
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2">
-                        <span className="font-bold text-slate-900 truncate">{p.title}</span>
+                        <span className="font-bold text-slate-900 dark:text-slate-100 truncate">{p.title}</span>
                         <span
                           className={`shrink-0 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${
                             isSold
-                              ? "bg-emerald-100 text-emerald-800 border border-emerald-200"
+                              ? "bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800"
                               : p.status === "available"
-                              ? "bg-indigo-50 text-indigo-700 border border-indigo-200"
-                              : "bg-amber-50 text-amber-700 border border-amber-200"
+                              ? "bg-indigo-50 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800"
+                              : "bg-amber-50 dark:bg-amber-950/80 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800"
                           }`}
                         >
                           {p.status}
                         </span>
                       </div>
-                      <div className="text-slate-400 text-[11px] mt-0.5">
+                      <div className="text-slate-400 dark:text-slate-400 text-[11px] mt-0.5">
                         {p.locality}, {p.city} • Owner:{" "}
-                        <span className="text-slate-600 font-medium">{p.owner?.name || "User"}</span>
+                        <span className="text-slate-600 dark:text-slate-300 font-medium">{p.owner?.name || "User"}</span>
                       </div>
                     </div>
                     <div className="text-right shrink-0">
-                      <div className="font-black text-slate-900">
+                      <div className="font-black text-slate-900 dark:text-slate-100">
                         {p.priceDisplay || formatPrice(p.price)}
                       </div>
                       <Link
                         href={`/properties/${p.propertyId}`}
-                        className="text-[11px] text-indigo-600 font-bold hover:underline"
+                        className="text-[11px] text-indigo-600 dark:text-indigo-400 font-bold hover:underline"
                       >
                         View Details
                       </Link>
@@ -530,62 +530,62 @@ export default function AdminDashboardPage() {
                 );
               })
             ) : (
-              <div className="p-6 text-center text-slate-400 text-xs">No properties found</div>
+              <div className="p-6 text-center text-slate-400 dark:text-slate-500 text-xs">No properties found</div>
             )}
           </div>
         </div>
 
         {/* Recent Registered Stakeholders */}
-        <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs">
-          <div className="p-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
-            <h3 className="font-black text-xs uppercase tracking-wider text-slate-800">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-xs transition-colors">
+          <div className="p-4 bg-slate-50 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+            <h3 className="font-black text-xs uppercase tracking-wider text-slate-800 dark:text-slate-200">
               Recent Registered Stakeholders
             </h3>
             <Link
               href="/admin/users"
-              className="text-xs font-bold text-indigo-600 hover:text-indigo-700"
+              className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition"
             >
               See All
             </Link>
           </div>
-          <div className="divide-y divide-slate-100">
+          <div className="divide-y divide-slate-100 dark:divide-slate-800/60">
             {stats?.recentUsers?.length > 0 ? (
               stats.recentUsers.map((u) => (
                 <div
                   key={u.userId}
-                  className="p-3.5 hover:bg-slate-50 transition flex items-center justify-between gap-3 text-xs"
+                  className="p-3.5 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition flex items-center justify-between gap-3 text-xs"
                 >
                   <div className="flex items-center gap-2.5 min-w-0">
-                    <div className="w-8 h-8 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-xs uppercase shrink-0">
+                    <div className="w-8 h-8 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 flex items-center justify-center font-bold text-xs uppercase shrink-0">
                       {u.name?.slice(0, 2) || "U"}
                     </div>
                     <div className="min-w-0">
-                      <div className="font-bold text-slate-900 truncate">{u.name}</div>
-                      <div className="text-slate-400 text-[11px] truncate">{u.email}</div>
+                      <div className="font-bold text-slate-900 dark:text-slate-100 truncate">{u.name}</div>
+                      <div className="text-slate-400 dark:text-slate-400 text-[11px] truncate">{u.email}</div>
                     </div>
                   </div>
                   <div className="text-right shrink-0">
                     <span
                       className={`px-2 py-0.5 rounded-md text-[10px] font-bold uppercase ${
                         u.role === "owner"
-                          ? "bg-blue-50 text-blue-700 border border-blue-200"
+                          ? "bg-blue-50 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800"
                           : u.role === "broker"
-                          ? "bg-amber-50 text-amber-700 border border-amber-200"
+                          ? "bg-amber-50 dark:bg-amber-950/80 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800"
                           : u.role === "super_admin"
-                          ? "bg-rose-50 text-rose-700 border border-rose-200"
-                          : "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                          ? "bg-rose-50 dark:bg-rose-950/80 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800"
+                          : "bg-emerald-50 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800"
                       }`}
                     >
                       {u.role}
                     </span>
-                    <div className="text-[10px] text-slate-400 mt-1">
+                    <div className="text-[10px] text-slate-400 dark:text-slate-500 mt-1">
                       {new Date(u.createdAt).toLocaleDateString()}
                     </div>
                   </div>
                 </div>
               ))
             ) : (
-              <div className="p-6 text-center text-slate-400 text-xs">No users registered yet</div>
+              <div className="p-6 text-center text-slate-400 dark:text-slate-500 text-xs">No users registered yet</div>
             )}
           </div>
         </div>

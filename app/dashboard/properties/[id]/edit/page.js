@@ -2,7 +2,7 @@
 
 import { useEffect, useState, use } from "react";
 import Link from "next/link";
-import { ArrowLeft, CheckCircle } from "lucide-react";
+import { ArrowLeft, CheckCircle, Sparkles, Loader2 } from "lucide-react";
 import { CITIES, PROPERTY_TYPES, BHK_OPTIONS } from "@/lib/constants";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import { getAuthHeaders } from "@/lib/auth";
@@ -14,6 +14,50 @@ function EditPropertyContent({ params }) {
   const [form, setForm] = useState(null);
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState({ saving: false, error: "", success: false });
+
+  // AI Description Generator State
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiError, setAiError] = useState("");
+
+  const handleGenerateWithAI = async () => {
+    if (!form) return;
+    setAiLoading(true);
+    setAiError("");
+
+    try {
+      const res = await fetch("http://localhost:5000/api/ai/property-description", {
+        method: "POST",
+        headers: getAuthHeaders({ "Content-Type": "application/json" }),
+        body: JSON.stringify({
+          propertyType: form.propertyType,
+          bedrooms: form.bedrooms,
+          bathrooms: form.bathrooms,
+          city: form.city,
+          locality: form.locality,
+          areaSqFt: form.areaSqFt,
+          price: form.price,
+          furnishing: form.furnishing,
+          listingType: form.listingType,
+          currentTitle: form.title,
+        }),
+      });
+
+      const json = await res.json();
+
+      if (res.ok && json.data?.description) {
+        setForm((prev) => ({
+          ...prev,
+          description: json.data.description,
+        }));
+      } else {
+        setAiError(json.message || "Failed to generate AI description");
+      }
+    } catch (err) {
+      setAiError(err.message || "Network error while connecting to AI service");
+    } finally {
+      setAiLoading(false);
+    }
+  };
 
   useEffect(() => {
     async function loadProperty() {
@@ -160,12 +204,42 @@ function EditPropertyContent({ params }) {
             </div>
           </div>
 
-          <div>
-            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Description</label>
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between">
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
+                Property Description
+              </label>
+              <button
+                type="button"
+                onClick={handleGenerateWithAI}
+                disabled={aiLoading}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/70 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 border border-indigo-200 dark:border-indigo-800 rounded-xl transition cursor-pointer shadow-2xs disabled:opacity-50"
+              >
+                {aiLoading ? (
+                  <>
+                    <Loader2 className="w-3.5 h-3.5 animate-spin text-indigo-600 dark:text-indigo-400" />
+                    <span>Writing Copy with AI...</span>
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+                    <span>Regenerate with AI</span>
+                  </>
+                )}
+              </button>
+            </div>
+
+            {aiError && (
+              <div className="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/50 border border-amber-200 dark:border-amber-900/50 text-xs text-amber-800 dark:text-amber-300">
+                {aiError}
+              </div>
+            )}
+
             <textarea
-              rows={4}
+              rows={6}
               value={form.description || ""}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
+              placeholder="Describe amenities, highlights, neighborhood, transport connectivity, or click 'Regenerate with AI'..."
               className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-slate-800 transition"
             />
           </div>
