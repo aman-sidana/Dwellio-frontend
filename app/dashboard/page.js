@@ -23,6 +23,7 @@ import { getAuthHeaders } from "@/lib/auth";
 function DashboardContent({ user }) {
   const [properties, setProperties] = useState([]);
   const [enquiries, setEnquiries] = useState([]);
+  const [shortlistedCount, setShortlistedCount] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -32,14 +33,17 @@ function DashboardContent({ user }) {
 
       try {
         const propQuery =
-          user.role === "super_admin" ? "limit=6" : `userId=${user.userId}&limit=6`;
+          user.role === "super_admin" ? "limit=50" : `userId=${user.userId}&limit=50`;
 
-        // Fetch user properties and enquiries in parallel
-        const [propsRes, enqsRes] = await Promise.all([
+        // Fetch user properties, enquiries, and real favorites in parallel
+        const [propsRes, enqsRes, favsRes] = await Promise.all([
           fetch(`http://localhost:5000/api/properties?${propQuery}`, {
             headers: getAuthHeaders(),
           }),
           fetch(`http://localhost:5000/api/enquiries/user/${user.userId}`, {
+            headers: getAuthHeaders(),
+          }),
+          fetch(`http://localhost:5000/api/favorites/owner/${user.userId}`, {
             headers: getAuthHeaders(),
           }),
         ]);
@@ -52,6 +56,11 @@ function DashboardContent({ user }) {
         if (enqsRes.ok) {
           const enqsJson = await enqsRes.json();
           setEnquiries(enqsJson.data || []);
+        }
+
+        if (favsRes.ok) {
+          const favsJson = await favsRes.json();
+          setShortlistedCount(favsJson.data?.count || 0);
         }
       } catch (err) {
         console.error("Dashboard data load error:", err);
@@ -66,6 +75,10 @@ function DashboardContent({ user }) {
   const totalProperties = properties.length;
   const totalEnquiries = enquiries.length;
   const availableCount = properties.filter((p) => p.status === "available").length;
+  const totalImpressions = properties.reduce(
+    (sum, p) => sum + (Number(p.viewsCount) || 0),
+    0
+  );
 
   return (
     <div className="w-full space-y-8">
@@ -146,7 +159,7 @@ function DashboardContent({ user }) {
             </div>
           </div>
           <div className="text-2xl font-black text-slate-900 dark:text-white mt-3">
-            {loading ? "..." : totalProperties * 3 + 2}
+            {loading ? "..." : shortlistedCount}
           </div>
           <span className="text-xs text-slate-400 dark:text-slate-500 font-medium mt-1 block">
             Saved by buyers
@@ -156,17 +169,17 @@ function DashboardContent({ user }) {
         <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-xs transition hover:border-purple-300 dark:hover:border-purple-700">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-              Monthly Impressions
+              Listing Impressions
             </span>
             <div className="w-9 h-9 rounded-xl bg-purple-50 dark:bg-purple-950 text-purple-600 dark:text-purple-400 flex items-center justify-center">
               <TrendingUp className="w-5 h-5" />
             </div>
           </div>
           <div className="text-2xl font-black text-slate-900 dark:text-white mt-3">
-            {loading ? "..." : "1,420"}
+            {loading ? "..." : totalImpressions.toLocaleString("en-IN")}
           </div>
           <span className="text-xs text-emerald-600 dark:text-emerald-400 font-semibold mt-1 block">
-            +22% reach this week
+            Total listing page views
           </span>
         </div>
       </div>

@@ -5,7 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   MapPin, Bed, Bath, Maximize2, Calendar, Building, CheckCircle, Phone, Mail,
-  User, Heart, Share2, ShieldCheck, ChevronRight, ArrowLeft
+  User, Heart, Share2, ShieldCheck, ChevronRight, ArrowLeft, MessageSquare,
+  Lock, X, CheckCircle2, Send
 } from "lucide-react";
 
 import { getAuthHeaders, getToken } from "@/lib/auth";
@@ -17,6 +18,11 @@ export default function PropertyDetailPage({ params }) {
   const [property, setProperty] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeImg, setActiveImg] = useState(0);
+
+  // User auth state
+  const [currentUser, setCurrentUser] = useState(null);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showEnquiryModal, setShowEnquiryModal] = useState(false);
 
   // Enquiry form state
   const [enquiryForm, setEnquiryForm] = useState({
@@ -39,11 +45,12 @@ export default function PropertyDetailPage({ params }) {
         if (res.ok) {
           const json = await res.json();
           if (json.data) {
+            setCurrentUser(json.data);
             setEnquiryForm((prev) => ({
               ...prev,
-              name: prev.name || json.data.name || "",
-              email: prev.email || json.data.email || "",
-              phone: prev.phone || json.data.phone || "",
+              name: json.data.name || prev.name || "",
+              email: json.data.email || prev.email || "",
+              phone: json.data.phone || prev.phone || "",
             }));
           }
         }
@@ -69,6 +76,15 @@ export default function PropertyDetailPage({ params }) {
     fetchDetails();
   }, [id]);
 
+  const handleOpenEnquiry = () => {
+    const token = getToken();
+    if (!token) {
+      setShowAuthModal(true);
+    } else {
+      setShowEnquiryModal(true);
+    }
+  };
+
   const handleEnquirySubmit = async (e) => {
     e.preventDefault();
     setEnquiryStatus({ submitting: true, success: false, message: "" });
@@ -88,7 +104,6 @@ export default function PropertyDetailPage({ params }) {
           success: true,
           message: "Enquiry submitted! The seller will get in touch with you shortly.",
         });
-        setEnquiryForm({ name: "", email: "", phone: "", message: "" });
       } else {
         setEnquiryStatus({ submitting: false, success: false, message: data.message || "Failed to submit enquiry." });
       }
@@ -264,77 +279,239 @@ export default function PropertyDetailPage({ params }) {
               </div>
             )}
 
-            {/* Enquiry Form */}
-            <form onSubmit={handleEnquirySubmit} className="space-y-3 mt-4">
-              <h4 className="text-sm font-bold text-slate-800 dark:text-white">Send Direct Enquiry</h4>
-
-              {enquiryStatus.message && (
-                <div className={`p-3 rounded-xl text-xs ${
-                  enquiryStatus.success
-                    ? "bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60"
-                    : "bg-rose-50 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-800/60"
-                }`}>
-                  {enquiryStatus.message}
-                </div>
-              )}
-
-              <div>
-                <label className="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Your Name</label>
-                <input
-                  type="text"
-                  required
-                  value={enquiryForm.name}
-                  onChange={(e) => setEnquiryForm({ ...enquiryForm, name: e.target.value })}
-                  placeholder="Enter full name"
-                  className="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-slate-800 transition"
-                />
+            {/* Raise Enquiry Action CTA */}
+            <div className="mt-5 pt-5 border-t border-slate-100 dark:border-slate-800 space-y-3">
+              <div className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                Interested in this property? Raise a direct enquiry to connect with {property.owner?.name || "the seller"}.
               </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Your Email</label>
-                <input
-                  type="email"
-                  required
-                  value={enquiryForm.email}
-                  onChange={(e) => setEnquiryForm({ ...enquiryForm, email: e.target.value })}
-                  placeholder="name@email.com"
-                  className="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-slate-800 transition"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Phone Number</label>
-                <input
-                  type="tel"
-                  required
-                  value={enquiryForm.phone}
-                  onChange={(e) => setEnquiryForm({ ...enquiryForm, phone: e.target.value })}
-                  placeholder="+91 98765 43210"
-                  className="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-slate-800 transition"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Message</label>
-                <textarea
-                  rows={3}
-                  value={enquiryForm.message}
-                  onChange={(e) => setEnquiryForm({ ...enquiryForm, message: e.target.value })}
-                  className="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-slate-800 transition"
-                />
-              </div>
-
+              
               <button
-                type="submit"
-                disabled={enquiryStatus.submitting}
-                className="w-full py-2.5 bg-indigo-600 dark:bg-indigo-500 hover:bg-indigo-700 dark:hover:bg-indigo-600 disabled:opacity-50 text-white font-bold text-xs rounded-xl shadow-xs transition"
+                type="button"
+                onClick={handleOpenEnquiry}
+                className="w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs sm:text-sm rounded-xl shadow-md shadow-indigo-600/20 hover:shadow-lg transition flex items-center justify-center gap-2 cursor-pointer"
               >
-                {enquiryStatus.submitting ? "Submitting..." : "Contact Owner Now"}
+                <MessageSquare className="w-4 h-4" />
+                Raise Direct Enquiry
               </button>
-            </form>
+
+              <div className="flex items-center justify-center gap-1.5 text-[11px] text-slate-400 dark:text-slate-500 pt-1">
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
+                <span>Verified Listing • Secure Direct Contact</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
+
+      {/* 1. Login Required Modal */}
+      {showAuthModal && (
+        <div
+          className="fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto animate-in fade-in duration-200"
+          onClick={() => setShowAuthModal(false)}
+        >
+          <div
+            className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl w-full max-w-md p-6 shadow-2xl relative text-slate-900 dark:text-slate-100 transition-colors"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setShowAuthModal(false)}
+              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="w-14 h-14 rounded-2xl bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mx-auto mb-4 border border-indigo-100 dark:border-indigo-800/60 shadow-inner">
+              <Lock className="w-7 h-7" />
+            </div>
+
+            <h3 className="text-xl font-black text-center text-slate-900 dark:text-white">
+              Sign In to Raise Enquiry
+            </h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400 text-center mt-2 leading-relaxed">
+              To connect directly with the seller and keep track of your active inquiries, please log in or create a free buyer account.
+            </p>
+
+            <div className="space-y-2.5 mt-6">
+              <Link
+                href={`/login?redirect=${encodeURIComponent(`/properties/${id}`)}`}
+                className="w-full py-2.5 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-xs transition flex items-center justify-center gap-2"
+              >
+                Log In to Continue
+              </Link>
+              <Link
+                href={`/register?redirect=${encodeURIComponent(`/properties/${id}`)}`}
+                className="w-full py-2.5 px-4 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold text-xs rounded-xl transition flex items-center justify-center gap-2"
+              >
+                Create Free Account
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 2. Raise Enquiry Popup Modal */}
+      {showEnquiryModal && (
+        <div
+          className="fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-xs flex items-center justify-center p-3 sm:p-5 overflow-y-auto animate-in fade-in duration-200"
+          onClick={() => setShowEnquiryModal(false)}
+        >
+          <div
+            className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl relative text-slate-900 dark:text-slate-100 transition-colors my-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800 flex items-start justify-between gap-3 bg-slate-50/70 dark:bg-slate-800/40">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="relative w-12 h-12 rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800 shrink-0 border border-slate-200 dark:border-slate-700">
+                  <Image
+                    src={images[0]?.imageUrl || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=300&q=80"}
+                    alt=""
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <div className="min-w-0">
+                  <h3 className="font-bold text-sm text-slate-900 dark:text-white truncate">
+                    {property.title}
+                  </h3>
+                  <div className="text-xs text-indigo-600 dark:text-indigo-400 font-extrabold mt-0.5">
+                    {property.priceDisplay || `₹${Number(property.price).toLocaleString("en-IN")}`}
+                  </div>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setShowEnquiryModal(false)}
+                className="p-2 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 rounded-xl hover:bg-slate-200/60 dark:hover:bg-slate-800 transition cursor-pointer shrink-0"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-5 sm:p-6">
+              {enquiryStatus.success ? (
+                <div className="text-center py-6 space-y-3">
+                  <div className="w-14 h-14 rounded-2xl bg-emerald-50 dark:bg-emerald-950/80 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto border border-emerald-200 dark:border-emerald-800 shadow-inner">
+                    <CheckCircle2 className="w-8 h-8" />
+                  </div>
+                  <h4 className="text-lg font-black text-slate-900 dark:text-white">
+                    Enquiry Submitted!
+                  </h4>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto leading-relaxed">
+                    {property.owner?.name || "The property seller"} has received your enquiry and will connect with you via phone or email shortly.
+                  </p>
+                  <div className="pt-3">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowEnquiryModal(false);
+                        setEnquiryStatus({ submitting: false, success: false, message: "" });
+                      }}
+                      className="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-xs transition cursor-pointer"
+                    >
+                      Done
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <form onSubmit={handleEnquirySubmit} className="space-y-4">
+                  <div>
+                    <h4 className="text-base font-black text-slate-900 dark:text-white">
+                      Send Enquiry to {property.owner?.name || "Seller"}
+                    </h4>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                      Verify your contact details so the owner can reach you.
+                    </p>
+                  </div>
+
+                  {enquiryStatus.message && !enquiryStatus.success && (
+                    <div className="p-3 rounded-xl text-xs bg-rose-50 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-800/60">
+                      {enquiryStatus.message}
+                    </div>
+                  )}
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">
+                        Your Full Name
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={enquiryForm.name}
+                        onChange={(e) => setEnquiryForm({ ...enquiryForm, name: e.target.value })}
+                        placeholder="Your name"
+                        className="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 rounded-xl focus:ring-2 focus:ring-indigo-500 transition"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">
+                        Phone Number
+                      </label>
+                      <input
+                        type="tel"
+                        required
+                        value={enquiryForm.phone}
+                        onChange={(e) => setEnquiryForm({ ...enquiryForm, phone: e.target.value })}
+                        placeholder="+91 98765 43210"
+                        className="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 rounded-xl focus:ring-2 focus:ring-indigo-500 transition"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">
+                      Email Address
+                    </label>
+                    <input
+                      type="email"
+                      required
+                      value={enquiryForm.email}
+                      onChange={(e) => setEnquiryForm({ ...enquiryForm, email: e.target.value })}
+                      placeholder="name@email.com"
+                      className="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 rounded-xl focus:ring-2 focus:ring-indigo-500 transition"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">
+                      Your Message
+                    </label>
+                    <textarea
+                      rows={3}
+                      value={enquiryForm.message}
+                      onChange={(e) => setEnquiryForm({ ...enquiryForm, message: e.target.value })}
+                      placeholder="Ask about floor plan, inspection timing, or price negotiation..."
+                      className="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 rounded-xl focus:ring-2 focus:ring-indigo-500 transition"
+                    />
+                  </div>
+
+                  <div className="pt-2 flex items-center justify-end gap-2.5">
+                    <button
+                      type="button"
+                      onClick={() => setShowEnquiryModal(false)}
+                      className="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold text-xs rounded-xl transition cursor-pointer"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={enquiryStatus.submitting}
+                      className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-bold text-xs rounded-xl shadow-xs transition flex items-center gap-2 cursor-pointer"
+                    >
+                      <Send className="w-3.5 h-3.5" />
+                      {enquiryStatus.submitting ? "Sending..." : "Submit Enquiry"}
+                    </button>
+                  </div>
+                </form>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

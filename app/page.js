@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import {
   Search,
   MapPin,
@@ -23,10 +24,11 @@ import { CITIES, PROPERTY_TYPES, BHK_OPTIONS } from "@/lib/constants";
 import FavoriteButton from "@/components/FavoriteButton";
 
 export default function Home() {
+  const router = useRouter();
 
   // Search Bar State
   const [activeTab, setActiveTab] = useState("sale"); // 'sale' | 'rent' | 'commercial'
-  const [city, setCity] = useState("Mumbai");
+  const [city, setCity] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [propertyType, setPropertyType] = useState("");
   const [bhk, setBhk] = useState("");
@@ -57,38 +59,40 @@ export default function Home() {
     const params = new URLSearchParams();
     if (activeTab === "commercial") {
       params.append("propertyType", "commercial");
-    } else {
-      params.append("listingType", activeTab);
-      if (propertyType) params.append("propertyType", propertyType);
+    } else if (activeTab === "sale") {
+      params.append("listingType", "sale");
+    } else if (activeTab === "rent") {
+      params.append("listingType", "rent");
     }
-    if (city) params.append("city", city);
+    if (propertyType) params.append("propertyType", propertyType);
+    if (city && city.trim()) params.append("city", city.trim());
     if (bhk) params.append("bedrooms", bhk);
-    if (searchQuery) params.append("search", searchQuery);
+    if (searchQuery && searchQuery.trim()) params.append("search", searchQuery.trim());
 
-    window.location.href = `/properties?${params.toString()}`;
+    router.push(`/properties?${params.toString()}`);
   };
 
   return (
-    <div className="w-full space-y-16 pb-16">
+    <div className="w-full space-y-12 pb-12">
       {/* HERO SECTION */}
-      <section className="w-full relative bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white pt-16 pb-24 px-4 sm:px-8 lg:px-12 xl:px-16 overflow-hidden">
+      <section className="w-full relative bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white pt-12 pb-16 px-4 sm:px-8 lg:px-12 xl:px-16 overflow-hidden">
         {/* Subtle decorative background blur */}
         <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#4f46e5_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none"></div>
 
-        <div className="relative w-full max-w-6xl mx-auto text-center space-y-6">
+        <div className="relative w-full max-w-5xl mx-auto text-center space-y-5">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-indigo-200 text-xs font-semibold tracking-wide shadow-xs">
             <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
             India&apos;s Preferred Property Destination
           </div>
 
-          <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-white leading-tight">
+          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
             Find Your Dream Home on <br className="hidden sm:inline" />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 via-blue-200 to-indigo-100">
               Dwellio
             </span>
           </h1>
 
-          <p className="max-w-2xl mx-auto text-sm sm:text-base text-slate-300 leading-relaxed font-normal">
+          <p className="max-w-2xl mx-auto text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
             Explore 10,000+ verified flats, luxury villas, and plots across Mumbai, Bangalore, Gurgaon, Pune, and Hyderabad.
           </p>
 
@@ -146,6 +150,7 @@ export default function Home() {
                       onChange={(e) => setCity(e.target.value)}
                       className="w-full pl-9 pr-3 py-2.5 text-xs sm:text-sm font-semibold bg-slate-50 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-slate-800 transition"
                     >
+                      <option value="" className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">All Cities</option>
                       {CITIES.map((c) => (
                         <option key={c} value={c} className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">{c}</option>
                       ))}

@@ -37,6 +37,10 @@ function NewPropertyContent({ user }) {
   const [aiLoading, setAiLoading] = useState(false);
   const [aiError, setAiError] = useState("");
 
+  const isPlot = form.propertyType === "plot";
+  const isCommercial = form.propertyType === "commercial";
+  const isResidential = !isPlot && !isCommercial;
+
   const handleGenerateWithAI = async () => {
     setAiLoading(true);
     setAiError("");
@@ -132,9 +136,10 @@ function NewPropertyContent({ user }) {
           userId: user?.userId || form.userId || 1,
           price: parseFloat(form.price),
           areaSqFt: parseFloat(form.areaSqFt),
-          bedrooms: form.bedrooms ? parseInt(form.bedrooms, 10) : null,
-          bathrooms: form.bathrooms ? parseInt(form.bathrooms, 10) : null,
-          balconies: form.balconies ? parseInt(form.balconies, 10) : 0,
+          bedrooms: isPlot || isCommercial ? null : (form.bedrooms ? parseInt(form.bedrooms, 10) : null),
+          bathrooms: isPlot ? null : (form.bathrooms ? parseInt(form.bathrooms, 10) : null),
+          balconies: isPlot || isCommercial ? 0 : (form.balconies ? parseInt(form.balconies, 10) : 0),
+          furnishing: isPlot ? "unfurnished" : form.furnishing,
           images: finalImages.length > 0 ? finalImages : [
             "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80"
           ],
@@ -217,7 +222,13 @@ function NewPropertyContent({ user }) {
               required
               value={form.title}
               onChange={(e) => setForm({ ...form, title: e.target.value })}
-              placeholder="e.g. Spacious 3 BHK Sea-Facing Apartment in Bandra West"
+              placeholder={
+                isPlot
+                  ? "e.g. 2400 sq.ft Corner Residential Villa Plot near Airport Road"
+                  : isCommercial
+                    ? "e.g. Grade-A Plug & Play Commercial Office Space in Prime Cyber Hub"
+                    : "e.g. Spacious 3 BHK Sea-Facing Apartment in Bandra West"
+              }
               className="w-full px-4 py-2.5 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-slate-800 transition"
             />
           </div>
@@ -239,56 +250,135 @@ function NewPropertyContent({ user }) {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Carpet / Super Area (sq.ft)</label>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                {isPlot ? "Plot / Land Area (sq.ft)" : isCommercial ? "Commercial Space Area (sq.ft)" : "Carpet / Super Area (sq.ft)"}
+              </label>
               <input
                 type="number"
                 required
                 value={form.areaSqFt}
                 onChange={(e) => setForm({ ...form, areaSqFt: e.target.value })}
-                placeholder="e.g. 1450"
+                placeholder={isPlot ? "e.g. 2400" : isCommercial ? "e.g. 3500" : "e.g. 1450"}
                 className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-slate-800 transition"
               />
             </div>
           </div>
 
-          {/* Configurations: BHK, Bathrooms, Furnishing */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Bedrooms (BHK)</label>
-              <select
-                value={form.bedrooms}
-                onChange={(e) => setForm({ ...form, bedrooms: e.target.value })}
-                className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl font-medium"
-              >
-                {BHK_OPTIONS.map((bhk) => (
-                  <option key={bhk.value} value={bhk.value} className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">{bhk.label}</option>
-                ))}
-              </select>
-            </div>
+          {/* Dynamic Category Configurations */}
+          {isPlot ? (
+            <div className="p-4 rounded-xl bg-slate-50/70 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700 space-y-2">
+              <span className="text-xs font-bold text-indigo-700 dark:text-indigo-400 uppercase tracking-wider block">
+                Plot & Land Specifications
+              </span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                    Plot Facing & Layout
+                  </label>
+                  <select
+                    value={form.plotFacing || "East Facing"}
+                    onChange={(e) => setForm({ ...form, plotFacing: e.target.value })}
+                    className="w-full px-3 py-2 text-sm bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl font-medium"
+                  >
+                    <option value="East Facing">East Facing (Vaastu Compliant)</option>
+                    <option value="North Facing">North Facing</option>
+                    <option value="Corner Plot (2 Sides Open)">Corner Plot (2 Sides Open)</option>
+                    <option value="Main Road Facing (3+ Sides Open)">Main Road Facing (3+ Sides Open)</option>
+                  </select>
+                </div>
 
-            <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Bathrooms</label>
-              <input
-                type="number"
-                value={form.bathrooms}
-                onChange={(e) => setForm({ ...form, bathrooms: e.target.value })}
-                className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl focus:ring-2 focus:ring-indigo-500"
-              />
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                    Boundary Wall Status
+                  </label>
+                  <select
+                    value={form.boundaryStatus || "Gated Community"}
+                    onChange={(e) => setForm({ ...form, boundaryStatus: e.target.value })}
+                    className="w-full px-3 py-2 text-sm bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl font-medium"
+                  >
+                    <option value="Gated Community">Gated Community / Township</option>
+                    <option value="Boundary Wall Constructed">Boundary Wall Constructed</option>
+                    <option value="No Boundary Wall">Open / No Boundary Wall</option>
+                  </select>
+                </div>
+              </div>
             </div>
+          ) : isCommercial ? (
+            <div className="p-4 rounded-xl bg-slate-50/70 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700 space-y-2">
+              <span className="text-xs font-bold text-indigo-700 dark:text-indigo-400 uppercase tracking-wider block">
+                Commercial Office & Retail Specs
+              </span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                    Commercial Fit-out & Furnishing
+                  </label>
+                  <select
+                    value={form.furnishing}
+                    onChange={(e) => setForm({ ...form, furnishing: e.target.value })}
+                    className="w-full px-3 py-2 text-sm bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl font-medium"
+                  >
+                    <option value="unfurnished">Bare Shell (Raw Space)</option>
+                    <option value="semi_furnished">Semi-Fitted (Flooring + AC Ready)</option>
+                    <option value="fully_furnished">Plug & Play Fully Furnished Office</option>
+                  </select>
+                </div>
 
-            <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Furnishing</label>
-              <select
-                value={form.furnishing}
-                onChange={(e) => setForm({ ...form, furnishing: e.target.value })}
-                className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl font-medium"
-              >
-                <option value="unfurnished" className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">Unfurnished</option>
-                <option value="semi_furnished" className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">Semi-Furnished</option>
-                <option value="fully_furnished" className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">Fully Furnished</option>
-              </select>
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                    Washrooms / Restrooms
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    value={form.bathrooms || ""}
+                    onChange={(e) => setForm({ ...form, bathrooms: e.target.value })}
+                    placeholder="e.g. 2 Washrooms"
+                    className="w-full px-3 py-2 text-sm bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl focus:ring-2 focus:ring-indigo-500"
+                  />
+                </div>
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Bedrooms (BHK)</label>
+                <select
+                  value={form.bedrooms}
+                  onChange={(e) => setForm({ ...form, bedrooms: e.target.value })}
+                  className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl font-medium"
+                >
+                  {BHK_OPTIONS.map((bhk) => (
+                    <option key={bhk.value} value={bhk.value} className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">{bhk.label}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Bathrooms</label>
+                <input
+                  type="number"
+                  min="1"
+                  value={form.bathrooms}
+                  onChange={(e) => setForm({ ...form, bathrooms: e.target.value })}
+                  className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl focus:ring-2 focus:ring-indigo-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Furnishing</label>
+                <select
+                  value={form.furnishing}
+                  onChange={(e) => setForm({ ...form, furnishing: e.target.value })}
+                  className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl font-medium"
+                >
+                  <option value="unfurnished" className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">Unfurnished</option>
+                  <option value="semi_furnished" className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">Semi-Furnished</option>
+                  <option value="fully_furnished" className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">Fully Furnished</option>
+                </select>
+              </div>
+            </div>
+          )}
 
           {/* Location Details */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -322,7 +412,7 @@ function NewPropertyContent({ user }) {
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
-                Property Photos (Cloudinary Upload)
+                Property Photos
               </label>
               <span className="text-xs text-slate-400 dark:text-slate-500">
                 {uploadedImages.length} uploaded
@@ -360,11 +450,10 @@ function NewPropertyContent({ user }) {
             )}
 
             {/* Drop / Select Area */}
-            <label className={`flex flex-col items-center justify-center border-2 border-dashed rounded-xl p-6 transition cursor-pointer ${
-              uploading
-                ? "bg-slate-100 dark:bg-slate-800/50 border-slate-300 dark:border-slate-700 opacity-60 pointer-events-none"
-                : "border-slate-300 dark:border-slate-700 hover:border-indigo-500 dark:hover:border-indigo-400 bg-slate-50/50 dark:bg-slate-800/40 hover:bg-indigo-50/30 dark:hover:bg-slate-800/70"
-            }`}>
+            <label className={`flex flex-col items-center justify-center border-2 border-dashed rounded-xl p-6 transition cursor-pointer ${uploading
+              ? "bg-slate-100 dark:bg-slate-800/50 border-slate-300 dark:border-slate-700 opacity-60 pointer-events-none"
+              : "border-slate-300 dark:border-slate-700 hover:border-indigo-500 dark:hover:border-indigo-400 bg-slate-50/50 dark:bg-slate-800/40 hover:bg-indigo-50/30 dark:hover:bg-slate-800/70"
+              }`}>
               <input
                 type="file"
                 multiple
@@ -393,19 +482,6 @@ function NewPropertyContent({ user }) {
               )}
             </label>
 
-            {/* Alternative Direct URL Option */}
-            <div className="pt-1">
-              <label className="block text-[11px] text-slate-500 dark:text-slate-400 mb-1">
-                Or paste an external Image URL (e.g. Unsplash)
-              </label>
-              <input
-                type="url"
-                value={form.imageUrl}
-                onChange={(e) => setForm({ ...form, imageUrl: e.target.value })}
-                placeholder="https://images.unsplash.com/... (optional)"
-                className="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-slate-800 transition"
-              />
-            </div>
           </div>
 
           {/* Description */}

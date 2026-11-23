@@ -19,6 +19,9 @@ function EditPropertyContent({ params }) {
   const [aiLoading, setAiLoading] = useState(false);
   const [aiError, setAiError] = useState("");
 
+  const isPlot = form?.propertyType === "plot";
+  const isCommercial = form?.propertyType === "commercial";
+
   const handleGenerateWithAI = async () => {
     if (!form) return;
     setAiLoading(true);
@@ -30,13 +33,13 @@ function EditPropertyContent({ params }) {
         headers: getAuthHeaders({ "Content-Type": "application/json" }),
         body: JSON.stringify({
           propertyType: form.propertyType,
-          bedrooms: form.bedrooms,
-          bathrooms: form.bathrooms,
+          bedrooms: isPlot || isCommercial ? null : form.bedrooms,
+          bathrooms: isPlot ? null : form.bathrooms,
           city: form.city,
           locality: form.locality,
           areaSqFt: form.areaSqFt,
           price: form.price,
-          furnishing: form.furnishing,
+          furnishing: isPlot ? "unfurnished" : form.furnishing,
           listingType: form.listingType,
           currentTitle: form.title,
         }),
@@ -89,7 +92,9 @@ function EditPropertyContent({ params }) {
           description: form.description,
           price: parseFloat(form.price),
           areaSqFt: parseFloat(form.areaSqFt),
-          bedrooms: form.bedrooms ? parseInt(form.bedrooms, 10) : null,
+          bedrooms: isPlot || isCommercial ? null : (form.bedrooms ? parseInt(form.bedrooms, 10) : null),
+          bathrooms: isPlot ? null : (form.bathrooms ? parseInt(form.bathrooms, 10) : null),
+          furnishing: isPlot ? "unfurnished" : (form.furnishing || "unfurnished"),
           city: form.city,
           locality: form.locality,
           listingType: form.listingType,
@@ -143,6 +148,33 @@ function EditPropertyContent({ params }) {
         )}
 
         <form onSubmit={handleUpdate} className="space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Listing Purpose</label>
+              <select
+                value={form.listingType || "sale"}
+                onChange={(e) => setForm({ ...form, listingType: e.target.value })}
+                className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl focus:ring-2 focus:ring-indigo-500 font-medium"
+              >
+                <option value="sale" className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">Sell (For Sale)</option>
+                <option value="rent" className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">Rent (For Lease)</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Property Category</label>
+              <select
+                value={form.propertyType || "apartment"}
+                onChange={(e) => setForm({ ...form, propertyType: e.target.value })}
+                className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl focus:ring-2 focus:ring-indigo-500 font-medium"
+              >
+                {PROPERTY_TYPES.map((pt) => (
+                  <option key={pt.value} value={pt.value} className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">{pt.label}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+
           <div>
             <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Title</label>
             <input
@@ -156,7 +188,9 @@ function EditPropertyContent({ params }) {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Price (₹)</label>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                {form.listingType === "rent" ? "Monthly Rent (₹)" : "Price (₹)"}
+              </label>
               <input
                 type="number"
                 required
@@ -167,7 +201,9 @@ function EditPropertyContent({ params }) {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Area (sq.ft)</label>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                {isPlot ? "Plot / Land Area (sq.ft)" : isCommercial ? "Commercial Space Area (sq.ft)" : "Area (sq.ft)"}
+              </label>
               <input
                 type="number"
                 required
@@ -177,6 +213,122 @@ function EditPropertyContent({ params }) {
               />
             </div>
           </div>
+
+          {/* Dynamic Category Configurations */}
+          {isPlot ? (
+            <div className="p-4 rounded-xl bg-slate-50/70 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700 space-y-2">
+              <span className="text-xs font-bold text-indigo-700 dark:text-indigo-400 uppercase tracking-wider block">
+                Plot & Land Specifications
+              </span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                    Plot Facing & Layout
+                  </label>
+                  <select
+                    value={form.plotFacing || "East Facing"}
+                    onChange={(e) => setForm({ ...form, plotFacing: e.target.value })}
+                    className="w-full px-3 py-2 text-sm bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl font-medium"
+                  >
+                    <option value="East Facing">East Facing (Vaastu Compliant)</option>
+                    <option value="North Facing">North Facing</option>
+                    <option value="Corner Plot (2 Sides Open)">Corner Plot (2 Sides Open)</option>
+                    <option value="Main Road Facing (3+ Sides Open)">Main Road Facing (3+ Sides Open)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                    Boundary Wall Status
+                  </label>
+                  <select
+                    value={form.boundaryStatus || "Gated Community"}
+                    onChange={(e) => setForm({ ...form, boundaryStatus: e.target.value })}
+                    className="w-full px-3 py-2 text-sm bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl font-medium"
+                  >
+                    <option value="Gated Community">Gated Community / Township</option>
+                    <option value="Boundary Wall Constructed">Boundary Wall Constructed</option>
+                    <option value="No Boundary Wall">Open / No Boundary Wall</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          ) : isCommercial ? (
+            <div className="p-4 rounded-xl bg-slate-50/70 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700 space-y-2">
+              <span className="text-xs font-bold text-indigo-700 dark:text-indigo-400 uppercase tracking-wider block">
+                Commercial Office & Retail Specs
+              </span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                    Commercial Fit-out & Furnishing
+                  </label>
+                  <select
+                    value={form.furnishing || "unfurnished"}
+                    onChange={(e) => setForm({ ...form, furnishing: e.target.value })}
+                    className="w-full px-3 py-2 text-sm bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl font-medium"
+                  >
+                    <option value="unfurnished">Bare Shell (Raw Space)</option>
+                    <option value="semi_furnished">Semi-Fitted (Flooring + AC Ready)</option>
+                    <option value="fully_furnished">Plug & Play Fully Furnished Office</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                    Washrooms / Restrooms
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    value={form.bathrooms || ""}
+                    onChange={(e) => setForm({ ...form, bathrooms: e.target.value })}
+                    placeholder="e.g. 2 Washrooms"
+                    className="w-full px-3 py-2 text-sm bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl focus:ring-2 focus:ring-indigo-500"
+                  />
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Bedrooms (BHK)</label>
+                <select
+                  value={form.bedrooms || ""}
+                  onChange={(e) => setForm({ ...form, bedrooms: e.target.value })}
+                  className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl font-medium"
+                >
+                  {BHK_OPTIONS.map((bhk) => (
+                    <option key={bhk.value} value={bhk.value} className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">{bhk.label}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Bathrooms</label>
+                <input
+                  type="number"
+                  min="1"
+                  value={form.bathrooms || ""}
+                  onChange={(e) => setForm({ ...form, bathrooms: e.target.value })}
+                  className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl focus:ring-2 focus:ring-indigo-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Furnishing</label>
+                <select
+                  value={form.furnishing || "unfurnished"}
+                  onChange={(e) => setForm({ ...form, furnishing: e.target.value })}
+                  className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl font-medium"
+                >
+                  <option value="unfurnished" className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">Unfurnished</option>
+                  <option value="semi_furnished" className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">Semi-Furnished</option>
+                  <option value="fully_furnished" className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">Fully Furnished</option>
+                </select>
+              </div>
+            </div>
+          )}
 
           <div className="grid grid-cols-2 gap-4">
             <div>

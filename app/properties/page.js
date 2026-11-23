@@ -1,35 +1,45 @@
 "use client";
 
-import { useEffect, useState, use } from "react";
+import { useEffect, useState, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { Search, MapPin, Bed, Bath, Maximize2, Filter, Heart, ArrowUpDown, Building } from "lucide-react";
 import { CITIES, PROPERTY_TYPES, BHK_OPTIONS } from "@/lib/constants";
 import FavoriteButton from "@/components/FavoriteButton";
 
-export default function PropertiesPage({ searchParams }) {
-  const unwrappedParams = searchParams ? use(searchParams) : {};
+function PropertiesList() {
+  const urlParams = useSearchParams();
+
+  // Filters state initialized from URL
+  const [city, setCity] = useState(urlParams.get("city") || "");
+  const [listingType, setListingType] = useState(urlParams.get("listingType") || "");
+  const [propertyType, setPropertyType] = useState(urlParams.get("propertyType") || "");
+  const [bedrooms, setBedrooms] = useState(urlParams.get("bedrooms") || "");
+  const [search, setSearch] = useState(urlParams.get("search") || "");
 
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
   const [totalCount, setTotalCount] = useState(0);
 
-  // Filters state
-  const [city, setCity] = useState(unwrappedParams.city || "");
-  const [listingType, setListingType] = useState(unwrappedParams.listingType || "");
-  const [propertyType, setPropertyType] = useState(unwrappedParams.propertyType || "");
-  const [bedrooms, setBedrooms] = useState(unwrappedParams.bedrooms || "");
-  const [search, setSearch] = useState(unwrappedParams.search || "");
+  // Sync state if URL search parameters change
+  useEffect(() => {
+    setCity(urlParams.get("city") || "");
+    setListingType(urlParams.get("listingType") || "");
+    setPropertyType(urlParams.get("propertyType") || "");
+    setBedrooms(urlParams.get("bedrooms") || "");
+    setSearch(urlParams.get("search") || "");
+  }, [urlParams]);
 
   const fetchFilteredProperties = async () => {
     setLoading(true);
     try {
       const params = new URLSearchParams();
-      if (city) params.append("city", city);
-      if (listingType) params.append("listingType", listingType);
-      if (propertyType) params.append("propertyType", propertyType);
-      if (bedrooms) params.append("bedrooms", bedrooms);
-      if (search) params.append("search", search);
+      if (city && city.trim()) params.append("city", city.trim());
+      if (listingType && listingType.trim()) params.append("listingType", listingType.trim());
+      if (propertyType && propertyType.trim()) params.append("propertyType", propertyType.trim());
+      if (bedrooms && bedrooms.trim()) params.append("bedrooms", bedrooms.trim());
+      if (search && search.trim()) params.append("search", search.trim());
 
       const res = await fetch(`http://localhost:5000/api/properties?${params.toString()}`);
       if (res.ok) {
@@ -50,7 +60,7 @@ export default function PropertiesPage({ searchParams }) {
 
   useEffect(() => {
     fetchFilteredProperties();
-  }, [city, listingType, propertyType, bedrooms]);
+  }, [city, listingType, propertyType, bedrooms, search]);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
@@ -308,5 +318,20 @@ export default function PropertiesPage({ searchParams }) {
         </div>
       )}
     </div>
+  );
+}
+
+export default function PropertiesPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="w-full px-4 sm:px-8 lg:px-12 py-16 text-center">
+          <div className="w-8 h-8 border-3 border-indigo-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-slate-500 text-sm">Loading properties...</p>
+        </div>
+      }
+    >
+      <PropertiesList />
+    </Suspense>
   );
 }
