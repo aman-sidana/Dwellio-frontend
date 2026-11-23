@@ -351,7 +351,7 @@ function MyPropertiesContent({ user }) {
     setLoading(true);
     try {
       const query = user.role === "super_admin" ? "limit=50" : `userId=${user.userId}&limit=50`;
-      const res = await fetch(`http://localhost:5000/api/properties?${query}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/properties?${query}`, {
         headers: getAuthHeaders(),
       });
       if (res.ok) {

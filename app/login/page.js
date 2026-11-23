@@ -18,7 +18,7 @@ function LoginFormContent() {
     setStatus({ loading: true, error: "", success: false });
 
     try {
-      const res = await fetch("http://localhost:5000/api/users/login", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

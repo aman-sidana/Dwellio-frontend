@@ -26,7 +26,7 @@ export default function AdminOwnersPage() {
   const fetchUsers = async () => {
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:5000/api/users", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users`, {
         headers: getAuthHeaders(),
       });
       if (res.ok) {
@@ -52,7 +52,7 @@ export default function AdminOwnersPage() {
     setActionLoading(userId);
     setFeedback({ message: "", isError: false });
     try {
-      const res = await fetch(`http://localhost:5000/api/users/${userId}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/${userId}`, {
         method: "DELETE",
         headers: getAuthHeaders(),
       });

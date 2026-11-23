@@ -16,7 +16,7 @@ function FavoritesContent({ user }) {
     if (!user) return;
     setLoading(true);
     try {
-      const res = await fetch(`http://localhost:5000/api/favorites/user/${user.userId}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/favorites/user/${user.userId}`, {
         headers: getAuthHeaders(),
       });
       if (res.ok) {

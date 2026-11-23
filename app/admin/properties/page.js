@@ -29,7 +29,7 @@ export default function AdminPropertiesPage() {
     setLoading(true);
     try {
       // Query with allStatuses=true to fetch all listings (sold, available, pending, rented)
-      const res = await fetch("http://localhost:5000/api/properties?allStatuses=true&limit=100", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/properties?allStatuses=true&limit=100`, {
         headers: getAuthHeaders(),
       });
       if (res.ok) {
@@ -52,7 +52,7 @@ export default function AdminPropertiesPage() {
     setActionLoading(propertyId);
     setFeedback({ message: "", isError: false });
     try {
-      const res = await fetch(`http://localhost:5000/api/properties/${propertyId}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/properties/${propertyId}`, {
         method: "PUT",
         headers: getAuthHeaders({ "Content-Type": "application/json" }),
         body: JSON.stringify({ status: newStatus }),
@@ -80,7 +80,7 @@ export default function AdminPropertiesPage() {
     setActionLoading(propertyId);
     setFeedback({ message: "", isError: false });
     try {
-      const res = await fetch(`http://localhost:5000/api/properties/${propertyId}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/properties/${propertyId}`, {
         method: "DELETE",
         headers: getAuthHeaders(),
       });

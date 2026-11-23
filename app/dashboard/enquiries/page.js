@@ -14,7 +14,7 @@ function EnquiriesContent({ user }) {
     async function loadEnquiries() {
       if (!user) return;
       try {
-        const res = await fetch(`http://localhost:5000/api/enquiries/user/${user.userId}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/enquiries/user/${user.userId}`, {
           headers: getAuthHeaders(),
         });
         if (res.ok) {

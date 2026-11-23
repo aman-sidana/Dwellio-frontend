@@ -39,7 +39,7 @@ export default function PropertyDetailPage({ params }) {
       const token = getToken();
       if (!token) return;
       try {
-        const res = await fetch("http://localhost:5000/api/users/me", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/me`, {
           headers: getAuthHeaders(),
         });
         if (res.ok) {
@@ -62,7 +62,7 @@ export default function PropertyDetailPage({ params }) {
   useEffect(() => {
     async function fetchDetails() {
       try {
-        const res = await fetch(`http://localhost:5000/api/properties/${id}`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/properties/${id}`);
         if (res.ok) {
           const json = await res.json();
           setProperty(json.data);
@@ -89,7 +89,7 @@ export default function PropertyDetailPage({ params }) {
     e.preventDefault();
     setEnquiryStatus({ submitting: true, success: false, message: "" });
     try {
-      const res = await fetch("http://localhost:5000/api/enquiries", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/enquiries`, {
         method: "POST",
         headers: getAuthHeaders({ "Content-Type": "application/json" }),
         body: JSON.stringify({

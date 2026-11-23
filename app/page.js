@@ -40,7 +40,7 @@ export default function Home() {
   useEffect(() => {
     async function loadFeatured() {
       try {
-        const res = await fetch("http://localhost:5000/api/properties/featured?limit=6");
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/properties/featured?limit=6`);
         if (res.ok) {
           const json = await res.json();
           setFeaturedProperties(json.data || []);

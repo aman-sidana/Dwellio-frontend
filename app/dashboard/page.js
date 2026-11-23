@@ -37,13 +37,13 @@ function DashboardContent({ user }) {
 
         // Fetch user properties, enquiries, and real favorites in parallel
         const [propsRes, enqsRes, favsRes] = await Promise.all([
-          fetch(`http://localhost:5000/api/properties?${propQuery}`, {
+          fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/properties?${propQuery}`, {
             headers: getAuthHeaders(),
           }),
-          fetch(`http://localhost:5000/api/enquiries/user/${user.userId}`, {
+          fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/enquiries/user/${user.userId}`, {
             headers: getAuthHeaders(),
           }),
-          fetch(`http://localhost:5000/api/favorites/owner/${user.userId}`, {
+          fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/favorites/owner/${user.userId}`, {
             headers: getAuthHeaders(),
           }),
         ]);

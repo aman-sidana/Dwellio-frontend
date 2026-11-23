@@ -13,7 +13,7 @@ export default function FavoriteButton({ propertyId, initialFavorite = false, on
       if (!propertyId) return;
       try {
         const res = await fetch(
-          `http://localhost:5000/api/favorites/check?propertyId=${propertyId}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/favorites/check?propertyId=${propertyId}`,
           { headers: getAuthHeaders() }
         );
         if (res.ok) {
@@ -35,7 +35,7 @@ export default function FavoriteButton({ propertyId, initialFavorite = false, on
     setIsFavorite(!prev);
 
     try {
-      const res = await fetch("http://localhost:5000/api/favorites/toggle", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/favorites/toggle`, {
         method: "POST",
         headers: getAuthHeaders({ "Content-Type": "application/json" }),
         body: JSON.stringify({ propertyId }),

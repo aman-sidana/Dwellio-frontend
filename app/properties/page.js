@@ -41,7 +41,7 @@ function PropertiesList() {
       if (bedrooms && bedrooms.trim()) params.append("bedrooms", bedrooms.trim());
       if (search && search.trim()) params.append("search", search.trim());
 
-      const res = await fetch(`http://localhost:5000/api/properties?${params.toString()}`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/properties?${params.toString()}`);
       if (res.ok) {
         const json = await res.json();
         setProperties(json.data?.properties || []);

@@ -11,7 +11,7 @@ export default function UnauthorizedPage() {
   useEffect(() => {
     async function loadUser() {
       try {
-        const res = await fetch("http://localhost:5000/api/users/me", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/me`, {
           headers: getAuthHeaders(),
         });
         if (res.ok) {

@@ -46,7 +46,7 @@ function NewPropertyContent({ user }) {
     setAiError("");
 
     try {
-      const res = await fetch("http://localhost:5000/api/ai/property-description", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/ai/property-description`, {
         method: "POST",
         headers: getAuthHeaders({ "Content-Type": "application/json" }),
         body: JSON.stringify({
@@ -93,7 +93,7 @@ function NewPropertyContent({ user }) {
     }
 
     try {
-      const res = await fetch("http://localhost:5000/api/upload", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/upload`, {
         method: "POST",
         headers: getAuthHeaders(),
         body: formData,
@@ -128,7 +128,7 @@ function NewPropertyContent({ user }) {
     }
 
     try {
-      const res = await fetch("http://localhost:5000/api/properties", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/properties`, {
         method: "POST",
         headers: getAuthHeaders({ "Content-Type": "application/json" }),
         body: JSON.stringify({

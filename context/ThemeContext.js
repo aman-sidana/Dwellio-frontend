@@ -57,7 +57,7 @@ export function ThemeProvider({ children }) {
       }
 
       try {
-        const res = await fetch("http://localhost:5000/api/users/me", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/me`, {
           headers: getAuthHeaders(),
         });
 
@@ -106,7 +106,7 @@ export function ThemeProvider({ children }) {
       const token = getToken();
       if (token && currentUser?.userId) {
         try {
-          await fetch("http://localhost:5000/api/users/theme", {
+          await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/theme`, {
             method: "PATCH",
             headers: getAuthHeaders({ "Content-Type": "application/json" }),
             body: JSON.stringify({ theme: validatedTheme }),
